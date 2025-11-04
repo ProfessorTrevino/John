@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Filmmaking - Lesson 3: Coverage Angles</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 20px;
+            position: relative;
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .section.animate-in {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .title-section {
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+            text-align: center;
+        }
+
+        .content-section {
+            background: #0f0f0f;
+        }
+
+        .section:nth-child(even) {
+            background: #1a1a1a;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #06ffa5, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient 3s ease infinite;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #00d4ff;
+            border-bottom: 3px solid #06ffa5;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem 0;
+            color: #06ffa5;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #a0a0a0;
+            margin-bottom: 1rem;
+        }
+
+        .instructor-info {
+            font-size: 1.2rem;
+            color: #00d4ff;
+            margin-top: 2rem;
+        }
+
+        .content-container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .objectives-list, .checklist {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .objectives-list li, .checklist li {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid #00d4ff;
+            border-radius: 4px;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .objectives-list li:hover, .checklist li:hover {
+            transform: translateX(10px);
+            background: rgba(0, 212, 255, 0.2);
+        }
+
+        .angle-card {
+            background: linear-gradient(135deg, rgba(6, 255, 165, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 15px;
+            border: 2px solid #00d4ff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .angle-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(180deg, #06ffa5, #00d4ff);
+        }
+
+        .angle-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .angle-icon {
+            font-size: 3rem;
+            margin-right: 1.5rem;
+        }
+
+        .angle-title {
+            font-size: 2rem;
+            color: #00d4ff;
+            margin: 0;
+        }
+
+        .example-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 5px solid #00d4ff;
+        }
+
+        .prompt-template {
+            background: #0d1b2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            color: #00d4ff;
+            margin: 1rem 0;
+            border: 1px solid #00d4ff;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            margin: 0.2rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .tag.source {
+            background: #00d4ff;
+            color: #0a0a0a;
+        }
+
+        .tag.critical {
+            background: #06ffa5;
+            color: #0a0a0a;
+        }
+
+        .tag.danger {
+            background: #ff006e;
+            color: #ffffff;
+        }
+
+        .key-concept {
+            background: linear-gradient(135deg, #06ffa5, #00d4ff);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 2rem 0;
+            box-shadow: 0 10px 40px rgba(6, 255, 165, 0.3);
+        }
+
+        .warning-box {
+            background: rgba(255, 0, 110, 0.1);
+            border: 2px solid #ff006e;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+
+        .warning-box h3 {
+            color: #ff006e;
+            margin-top: 0;
+        }
+
+        .critical-box {
+            background: rgba(6, 255, 165, 0.1);
+            border: 3px solid #06ffa5;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            box-shadow: 0 0 20px rgba(6, 255, 165, 0.2);
+        }
+
+        .critical-box h3 {
+            color: #06ffa5;
+            margin-top: 0;
+            font-size: 2rem;
+        }
+
+        .workflow-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .workflow-step {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #00d4ff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .workflow-step:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .workflow-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #06ffa5;
+            margin-bottom: 0.5rem;
+        }
+
+        .spatial-demo {
+            background: #1b263b;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid #06ffa5;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .comparison-box {
+            padding: 2rem;
+            border-radius: 10px;
+            border: 2px solid;
+        }
+
+        .bad-prompt {
+            border-color: #ff006e;
+            background: rgba(255, 0, 110, 0.1);
+        }
+
+        .good-prompt {
+            border-color: #06ffa5;
+            background: rgba(6, 255, 165, 0.1);
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            font-size: 2rem;
+            z-index: 100;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-20px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+
+        .navigation {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: #00d4ff;
+            transform: scale(1.5);
+        }
+
+        .nav-dot:hover {
+            background: #06ffa5;
+            transform: scale(1.3);
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tip-card {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid #00d4ff;
+            transition: transform 0.3s ease;
+        }
+
+        .tip-card:hover {
+            transform: translateY(-5px);
+            background: rgba(0, 212, 255, 0.2);
+        }
+
+        .tip-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            h2 {
+                font-size: 1.8rem;
+            }
+            .navigation {
+                display: none;
+            }
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .numbered-list {
+            counter-reset: item;
+            list-style: none;
+        }
+
+        .numbered-list li {
+            counter-increment: item;
+            margin: 1rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .numbered-list li::before {
+            content: counter(item);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #00d4ff;
+            color: #0a0a0a;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .highlight {
+            background: rgba(6, 255, 165, 0.3);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #06ffa5;
+        }
+
+        .visual-diagram {
+            background: #1b263b;
+            padding: 3rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            text-align: center;
+            border: 2px solid #00d4ff;
+        }
+
+        .diagram-row {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .diagram-element {
+            background: rgba(0, 212, 255, 0.2);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem;
+            min-width: 150px;
+            border: 2px solid #00d4ff;
+        }
+
+        .diagram-arrow {
+            font-size: 2rem;
+            color: #06ffa5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Dots -->
+    <div class="navigation" id="navigation">
+        <!-- Will be populated by JavaScript -->
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator" id="scrollIndicator">↓</div>
+
+    <!-- Title Section -->
+    <div class="section title-section" data-section="0">
+        <h1>AI Filmmaking</h1>
+        <div class="subtitle">The Master Image Method</div>
+        <div class="instructor-info">
+            John Treviño, MFA<br>
+            UTRGV Theater Department<br>
+            Fall 2025
+        </div>
+        <div style="margin-top: 3rem; font-size: 2rem; color: #00d4ff;">
+            Lesson 3: Generating Coverage Angles
+        </div>
+    </div>
+
+    <!-- Learning Objectives -->
+    <div class="section content-section" data-section="1">
+        <div class="content-container">
+            <h2>Learning Objectives</h2>
+            <p style="margin-bottom: 2rem; font-size: 1.1rem;">By the end of this lesson, students will:</p>
+            <ul class="objectives-list">
+                <li>Understand how to generate multiple camera angles from a single master image</li>
+                <li>Master the technique of "returning to the source" for each new angle</li>
+                <li>Navigate AI's spatial confusion with directional commands</li>
+                <li>Create a full set of editable coverage for their scene</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- The Critical Principle -->
+    <div class="section content-section" data-section="2">
+        <div class="content-container">
+            <h2>The Critical Principle</h2>
+            
+            <div class="key-concept">
+                "Do not chain angles. Always return to the source."
+            </div>
+
+            <div class="critical-box">
+                <h3>🎯 This is THE Most Important Rule</h3>
+                <p style="font-size: 1.2rem; margin-bottom: 1rem;">
+                    For EVERY new camera angle, you MUST start from the <span class="highlight">original master image</span>.
+                </p>
+                <p style="font-size: 1.1rem;">
+                    <strong>Never</strong> use a frame from your master shot sequence as the starting point for a new angle. 
+                    <strong>Never</strong> chain one angle into another angle.
+                </p>
+            </div>
+
+            <div class="visual-diagram">
+                <h3 style="color: #06ffa5; margin-bottom: 2rem;">Wrong Way vs. Right Way</h3>
+                
+                <div style="margin: 2rem 0;">
+                    <h4 style="color: #ff006e; margin-bottom: 1rem;">❌ WRONG - Chaining Angles</h4>
+                    <div class="diagram-row">
+                        <div class="diagram-element" style="border-color: #ff006e;">Master Image</div>
+                        <div class="diagram-arrow">→</div>
+                        <div class="diagram-element" style="border-color: #ff006e;">Master Shot</div>
+                        <div class="diagram-arrow">→</div>
+                        <div class="diagram-element" style="border-color: #ff006e;">OTS Shot</div>
+                        <div class="diagram-arrow">→</div>
+                        <div class="diagram-element" style="border-color: #ff006e;">Close-Up</div>
+                    </div>
+                    <p style="color: #ff006e; margin-top: 1rem;">This breaks continuity!</p>
+                </div>
+
+                <div style="margin: 3rem 0;">
+                    <h4 style="color: #06ffa5; margin-bottom: 1rem;">✓ RIGHT - Always Return to Source</h4>
+                    <div class="diagram-row">
+                        <div class="diagram-element" style="border-color: #06ffa5; background: rgba(6, 255, 165, 0.2);">
+                            <strong>MASTER IMAGE</strong><br>
+                            <small>(Always start here)</small>
+                        </div>
+                    </div>
+                    <div style="margin: 1rem 0; color: #06ffa5; font-size: 1.5rem;">↓ ↓ ↓</div>
+                    <div class="diagram-row">
+                        <div class="diagram-element">Master Shot</div>
+                        <div class="diagram-element">OTS Shot</div>
+                        <div class="diagram-element">Close-Up</div>
+                    </div>
+                    <p style="color: #06ffa5; margin-top: 1rem;">Each angle starts fresh from the master image!</p>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h3>⚠️ Why This Matters</h3>
+                <p style="font-size: 1.1rem;">
+                    The master image is your <strong>continuity anchor</strong>. Every time you start from it, the AI maintains:
+                </p>
+                <ul style="margin-top: 1rem; margin-left: 1.5rem;">
+                    <li>Identical character faces</li>
+                    <li>Same wardrobe and props</li>
+                    <li>Consistent lighting and location</li>
+                    <li>Matching spatial relationships</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Angle Types -->
+    <div class="section content-section" data-section="3">
+        <div class="content-container">
+            <h2>Coverage Angle Types</h2>
+            
+            <p style="font-size: 1.1rem; margin-bottom: 2rem;">
+                Traditional film coverage consists of multiple shot types. Here are the essential angles you'll generate:
+            </p>
+
+            <div class="angle-card">
+                <div class="angle-header">
+                    <div class="angle-icon">📹</div>
+                    <h3 class="angle-title">1. Master Shot (Wide)</h3>
+                </div>
+                <p style="font-size: 1.1rem; margin-bottom: 1rem;">
+                    <strong>What it is:</strong> Your wide shot showing all characters and the full scene geography.
+                </p>
+                <p style="margin-bottom: 1rem;">
+                    <strong>When to use:</strong> Establishing shots, scene transitions, showing full action
+                </p>
+                <p>
+                    <strong>Status:</strong> ✓ You already have this from Lesson 2!
+                </p>
+            </div>
+
+            <div class="angle-card">
+                <div class="angle-header">
+                    <div class="angle-icon">👤</div>
+                    <h3 class="angle-title">2. Over-the-Shoulder (OTS)</h3>
+                </div>
+                <p style="font-size: 1.1rem; margin-bottom: 1rem;">
+                    <strong>What it is:</strong> Shot from behind one character, looking at the other character's face
+                </p>
+                <p style="margin-bottom: 1rem;">
+                    <strong>When to use:</strong> Dialogue scenes, showing reactions, maintaining spatial relationships
+                </p>
+                <p>
+                    <strong>Tip:</strong> You'll typically need TWO OTS shots—one for each character
+                </p>
+            </div>
+
+            <div class="angle-card">
+                <div class="angle-header">
+                    <div class="angle-icon">😊</div>
+                    <h3 class="angle-title">3. Close-Up (CU)</h3>
+                </div>
+                <p style="font-size: 1.1rem; margin-bottom: 1rem;">
+                    <strong>What it is:</strong> Tight shot of a character's face, showing emotion
+                </p>
+                <p style="margin-bottom: 1rem;">
+                    <strong>When to use:</strong> Emotional moments, reactions, important lines
+                </p>
+                <p>
+                    <strong>Tip:</strong> Close-ups are your most powerful storytelling tool
+                </p>
+            </div>
+
+            <div class="angle-card">
+                <div class="angle-header">
+                    <div class="angle-icon">👥</div>
+                    <h3 class="angle-title">4. Medium Shot (MS)</h3>
+                </div>
+                <p style="font-size: 1.1rem; margin-bottom: 1rem;">
+                    <strong>What it is:</strong> Frames character from waist up
+                </p>
+                <p style="margin-bottom: 1rem;">
+                    <strong>When to use:</strong> Balance between emotion and action, conversation
+                </p>
+                <p>
+                    <strong>Tip:</strong> Great for physical business or gesture
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generating OTS Shot -->
+    <div class="section content-section" data-section="4">
+        <div class="content-container">
+            <h2>Step 1: Generate OTS Shot</h2>
+            
+            <div class="workflow-grid">
+                <div class="workflow-step">
+                    <div class="workflow-number">1</div>
+                    <p><strong>Load Master Image</strong></p>
+                </div>
+                <div class="workflow-step">
+                    <div class="workflow-number">2</div>
+                    <p><strong>Prompt for Camera Move + Dialogue</strong></p>
+                </div>
+                <div class="workflow-step">
+                    <div class="workflow-number">3</div>
+                    <p><strong>Generate Segment 1</strong></p>
+                </div>
+                <div class="workflow-step">
+                    <div class="workflow-number">4</div>
+                    <p><strong>Chain This Angle</strong></p>
+                </div>
+            </div>
+
+            <div class="critical-box">
+                <h3>Critical: The Starting Point</h3>
+                <p style="font-size: 1.2rem;">
+                    Input: <span class="tag source">ORIGINAL MASTER IMAGE</span> (NOT a frame from your master shot!)
+                </p>
+            </div>
+
+            <div class="example-box">
+                <h3>Prompt Structure for OTS:</h3>
+                <div class="prompt-template">
+From this original image, smoothly move the camera to an over-the-shoulder shot on [Character B]. [Character A] says, "[dialogue]" [Character B] responds, "[dialogue]"
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Real Example (OTS on Woman):</h3>
+                <p><strong>Scene:</strong> Park bench breakup</p>
+                <div class="prompt-template">
+From this original image, smoothly move the camera to position behind the man, looking over his right shoulder to frame the woman's face in an over-the-shoulder shot. The man says, "I think we need to talk." The woman responds, "What's wrong?" Natural performance, accurate lip-sync.
+                </div>
+            </div>
+
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">💡</div>
+                    <h4 style="color: #00d4ff;">Camera Movement</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">"Smoothly move the camera" gives the AI a sense of transition from the wide shot</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">📐</div>
+                    <h4 style="color: #00d4ff;">Be Descriptive</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Describe the position: "behind Character A, looking over their shoulder"</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">🎯</div>
+                    <h4 style="color: #00d4ff;">Frame Target</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">"Frame Character B's face" tells AI what to focus on</p>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h3>After Generating Segment 1:</h3>
+                <p style="font-size: 1.1rem; margin-bottom: 1rem;">
+                    Now you <strong>can</strong> chain this specific angle's segments together, just like you did with the master shot.
+                </p>
+                <ol class="numbered-list">
+                    <li>Extract last frame of OTS Segment 1</li>
+                    <li>Use that frame as input for OTS Segment 2</li>
+                    <li>Prompt: "Continuing from this over-the-shoulder frame, [next dialogue]"</li>
+                    <li>Repeat until the OTS angle covers your full scene</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- The Spatial Problem -->
+    <div class="section content-section" data-section="5">
+        <div class="content-container">
+            <h2>The Spatial Confusion Problem</h2>
+            
+            <div class="warning-box">
+                <h3>⚠️ AI's Biggest Weakness</h3>
+                <p style="font-size: 1.2rem;">
+                    Current AI tools frequently misinterpret directional commands like "left," "right," "over left shoulder," "pan right," etc.
+                </p>
+            </div>
+
+            <div class="spatial-demo">
+                <h3 style="color: #06ffa5; text-align: center; margin-bottom: 2rem;">The Left/Right Problem</h3>
+                
+                <p style="font-size: 1.1rem; margin-bottom: 2rem; text-align: center;">
+                    When you say "over the left shoulder," the AI might interpret this as:
+                </p>
+
+                <div class="tips-grid">
+                    <div class="tip-card" style="border-color: #ff006e;">
+                        <p style="color: #ff006e;"><strong>Camera-Left?</strong></p>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Left side of the frame</p>
+                    </div>
+                    <div class="tip-card" style="border-color: #ff006e;">
+                        <p style="color: #ff006e;"><strong>Scene-Left?</strong></p>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Stage left in the scene</p>
+                    </div>
+                    <div class="tip-card" style="border-color: #ff006e;">
+                        <p style="color: #ff006e;"><strong>Character's Left?</strong></p>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">The character's actual left shoulder</p>
+                    </div>
+                    <div class="tip-card" style="border-color: #ff006e;">
+                        <p style="color: #ff006e;"><strong>Viewer's Left?</strong></p>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Left from audience perspective</p>
+                    </div>
+                </div>
+
+                <p style="text-align: center; margin-top: 2rem; font-size: 1.2rem; color: #ff006e;">
+                    Result: The AI guesses randomly and is often wrong!
+                </p>
+            </div>
+
+            <div class="critical-box">
+                <h3>✓ THE SOLUTION: Avoid "Left" and "Right"</h3>
+                <p style="font-size: 1.2rem; margin-top: 1rem;">
+                    Instead of using directional words, use <span class="highlight">descriptive positioning</span>.
+                </p>
+            </div>
+
+            <div class="comparison-grid">
+                <div class="comparison-box bad-prompt">
+                    <h3 style="color: #ff006e;">❌ BAD PROMPTS</h3>
+                    <ul style="margin-top: 1rem; font-size: 0.95rem;">
+                        <li>"Move over the left shoulder"</li>
+                        <li>"Pan right to close-up"</li>
+                        <li>"OTS on the right"</li>
+                        <li>"Camera moves to the left side"</li>
+                    </ul>
+                    <p style="margin-top: 1rem; color: #ff006e;"><strong>Why they fail:</strong> Ambiguous directional terms</p>
+                </div>
+
+                <div class="comparison-box good-prompt">
+                    <h3 style="color: #06ffa5;">✓ GOOD PROMPTS</h3>
+                    <ul style="margin-top: 1rem; font-size: 0.95rem;">
+                        <li>"Position camera behind Character A, looking over Character A's shoulder to frame Character B's face"</li>
+                        <li>"Push in to a tight close-up on Character A's face"</li>
+                        <li>"Re-frame to a medium shot of Character B with Character A's shoulder in foreground"</li>
+                        <li>"Move camera to new position behind Character B"</li>
+                    </ul>
+                    <p style="margin-top: 1rem; color: #06ffa5;"><strong>Why they work:</strong> Descriptive, unambiguous positioning</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advanced Prompt Examples -->
+    <div class="section content-section" data-section="6">
+        <div class="content-container">
+            <h2>Advanced Prompt Examples</h2>
+
+            <div class="example-box">
+                <h3>Example 1: OTS on Character B</h3>
+                <p><strong>Setup:</strong> Man on left, woman on right, park bench</p>
+                <div class="prompt-template">
+From this original image, move the camera to a new position: behind the man, looking over the man's shoulder to frame the woman's face in the center of the shot. The man says, "I think we need to talk." The woman responds with concern, "What's wrong?" Natural performance, accurate lip-sync, maintain this camera angle.
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 2: OTS on Character A</h3>
+                <p><strong>Setup:</strong> Same scene, reverse angle</p>
+                <div class="prompt-template">
+From this original image, move the camera behind the woman, framing an over-the-shoulder shot that shows the man's face with the woman's shoulder and hair visible in the foreground. The man says, "I'm breaking up with you." Natural reactions, accurate lip-sync.
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 3: Close-Up on Character A</h3>
+                <p><strong>Setup:</strong> Emotional moment</p>
+                <div class="prompt-template">
+From this original image, push in to a tight close-up on the man's face, filling the frame with his expression. The man says in a calm, measured voice, "I'm breaking up with you." Show his controlled emotion, accurate lip-sync, slight camera movement to follow face.
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 4: Close-Up on Character B (Reaction)</h3>
+                <p><strong>Setup:</strong> Response to emotional moment</p>
+                <div class="prompt-template">
+From this original image, move to a close-up on the woman's face. The woman hears the off-screen line "I'm breaking up with you" and her expression shifts from confusion to shock to sadness. No dialogue, natural emotional reaction, maintain focus on her face.
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 5: Medium Shot (Single)</h3>
+                <p><strong>Setup:</strong> Isolating one character</p>
+                <div class="prompt-template">
+From this original image, re-frame to a medium shot of the woman from waist up, isolating her in the frame without the man visible. The woman says emotionally, "But why? What did I do wrong?" Natural body language, accurate lip-sync, maintain this framing.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Complete Workflow -->
+    <div class="section content-section" data-section="7">
+        <div class="content-container">
+            <h2>Complete Workflow Summary</h2>
+
+            <div class="visual-diagram">
+                <h3 style="color: #06ffa5; margin-bottom: 2rem;">Your Scene Coverage Workflow</h3>
+
+                <div style="text-align: left; max-width: 800px; margin: 0 auto;">
+                    <div style="background: rgba(6, 255, 165, 0.2); padding: 1.5rem; border-radius: 10px; margin: 1rem 0; border: 2px solid #06ffa5;">
+                        <h4 style="color: #06ffa5; margin-bottom: 1rem;">✓ You Already Have:</h4>
+                        <ul style="margin-left: 1.5rem;">
+                            <li>Master Image (your source)</li>
+                            <li>Complete Master Shot Sequence (chained segments)</li>
+                            <li>Script broken into segments</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: rgba(0, 212, 255, 0.2); padding: 1.5rem; border-radius: 10px; margin: 1rem 0; border: 2px solid #00d4ff;">
+                        <h4 style="color: #00d4ff; margin-bottom: 1rem;">📋 For Each New Angle:</h4>
+                        <ol class="numbered-list">
+                            <li>Start from <span class="highlight">original master image</span></li>
+                            <li>Generate Segment 1 with camera move + first dialogue</li>
+                            <li>Extract last frame of Segment 1</li>
+                            <li>Generate Segment 2 from that last frame</li>
+                            <li>Continue chaining until angle is complete</li>
+                            <li>Return to step 1 for next angle</li>
+                        </ol>
+                    </div>
+
+                    <div style="background: rgba(0, 212, 255, 0.2); padding: 1.5rem; border-radius: 10px; margin: 1rem 0; border: 2px solid #00d4ff;">
+                        <h4 style="color: #00d4ff; margin-bottom: 1rem;">🎬 Angles to Generate:</h4>
+                        <ul class="checklist">
+                            <li><strong>OTS Character B</strong> (full scene length)</li>
+                            <li><strong>OTS Character A</strong> (full scene length)</li>
+                            <li><strong>Close-Up Character A</strong> (key moments)</li>
+                            <li><strong>Close-Up Character B</strong> (reactions)</li>
+                            <li><strong>Optional:</strong> Medium shots, inserts, etc.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="critical-box">
+                <h3>⚡ Key Reminders</h3>
+                <ul class="checklist">
+                    <li><span class="tag critical">CRITICAL</span> Every new angle starts from the original master image</li>
+                    <li><span class="tag critical">CRITICAL</span> Avoid "left/right" commands—use descriptive positioning</li>
+                    <li>Chain segments within the same angle</li>
+                    <li>Never chain from one angle to another angle</li>
+                    <li>Use the same dialogue for all angles (ensures sync in editing)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Common Mistakes -->
+    <div class="section content-section" data-section="8">
+        <div class="content-container">
+            <h2>Common Mistakes to Avoid</h2>
+
+            <div class="tips-grid">
+                <div class="tip-card" style="border-color: #ff006e; background: rgba(255, 0, 110, 0.1);">
+                    <div class="tip-icon">❌</div>
+                    <h4 style="color: #ff006e;">Mistake #1</h4>
+                    <p style="font-size: 0.95rem;"><strong>Using a master shot frame as input for OTS</strong></p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem; color: #a0a0a0;">Always return to the original master image for each new angle!</p>
+                </div>
+
+                <div class="tip-card" style="border-color: #ff006e; background: rgba(255, 0, 110, 0.1);">
+                    <div class="tip-icon">❌</div>
+                    <h4 style="color: #ff006e;">Mistake #2</h4>
+                    <p style="font-size: 0.95rem;"><strong>Using "left" or "right" in prompts</strong></p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem; color: #a0a0a0;">AI will likely misinterpret. Use descriptive positioning instead.</p>
+                </div>
+
+                <div class="tip-card" style="border-color: #ff006e; background: rgba(255, 0, 110, 0.1);">
+                    <div class="tip-icon">❌</div>
+                    <h4 style="color: #ff006e;">Mistake #3</h4>
+                    <p style="font-size: 0.95rem;"><strong>Chaining OTS into close-up</strong></p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem; color: #a0a0a0;">Each angle gets its own chain starting from the master image.</p>
+                </div>
+
+                <div class="tip-card" style="border-color: #ff006e; background: rgba(255, 0, 110, 0.1);">
+                    <div class="tip-icon">❌</div>
+                    <h4 style="color: #ff006e;">Mistake #4</h4>
+                    <p style="font-size: 0.95rem;"><strong>Different dialogue for different angles</strong></p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem; color: #a0a0a0;">Keep dialogue identical across angles so they sync in editing.</p>
+                </div>
+
+                <div class="tip-card" style="border-color: #ff006e; background: rgba(255, 0, 110, 0.1);">
+                    <div class="tip-icon">❌</div>
+                    <h4 style="color: #ff006e;">Mistake #5</h4>
+                    <p style="font-size: 0.95rem;"><strong>Forgetting "From this original image"</strong></p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem; color: #a0a0a0;">This phrase helps anchor the AI to your source image.</p>
+                </div>
+
+                <div class="tip-card" style="border-color: #ff006e; background: rgba(255, 0, 110, 0.1);">
+                    <div class="tip-icon">❌</div>
+                    <h4 style="color: #ff006e;">Mistake #6</h4>
+                    <p style="font-size: 0.95rem;"><strong>Too much camera movement in one prompt</strong></p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem; color: #a0a0a0;">Keep moves simple: wide to OTS, or OTS held steady.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- In-Class Exercise -->
+    <div class="section content-section" data-section="9">
+        <div class="content-container">
+            <h2>In-Class Exercise</h2>
+            
+            <div class="critical-box">
+                <h3>Generate Your First OTS Angle</h3>
+                
+                <p style="font-size: 1.1rem; margin: 1.5rem 0;">
+                    Today, you'll generate at least the first two segments of ONE over-the-shoulder angle.
+                </p>
+
+                <ol class="numbered-list">
+                    <li>Load your <strong>original master image</strong> (not a master shot frame!)</li>
+                    <li>Write your OTS prompt using descriptive positioning (no "left/right")</li>
+                    <li>Generate OTS Segment 1</li>
+                    <li>Evaluate: Does the camera angle look right? Is continuity maintained?</li>
+                    <li>If good: Extract last frame</li>
+                    <li>If bad: Refine prompt and regenerate</li>
+                    <li>Generate OTS Segment 2 from the last frame</li>
+                    <li>Review: Does it chain smoothly?</li>
+                </ol>
+            </div>
+
+            <div class="warning-box">
+                <h3>✅ Success Criteria</h3>
+                <ul class="checklist">
+                    <li>Camera is clearly in OTS position</li>
+                    <li>Characters match the master image (faces, clothes, location)</li>
+                    <li>Dialogue syncs reasonably well</li>
+                    <li>Transition between Segment 1 and 2 is smooth</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>Troubleshooting Guide</h3>
+                <ul class="checklist">
+                    <li><strong>Wrong angle generated:</strong> Be more specific in positioning description</li>
+                    <li><strong>Characters look different:</strong> Make sure you used the ORIGINAL master image, not a master shot frame</li>
+                    <li><strong>Camera in wrong place:</strong> Avoid "left/right," describe the exact position</li>
+                    <li><strong>Too much movement:</strong> Add "hold this angle" or "maintain this shot"</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Homework -->
+    <div class="section content-section" data-section="10">
+        <div class="content-container">
+            <h2>Homework Assignment</h2>
+            
+            <div class="angle-card">
+                <h3 style="margin-top: 0;">Complete Coverage Generation</h3>
+                
+                <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">
+                    Generate a full set of editable coverage for your scene.
+                </p>
+
+                <div style="background: rgba(0, 212, 255, 0.1); padding: 1.5rem; border-radius: 10px; margin: 1.5rem 0;">
+                    <h4 style="color: #00d4ff; margin-bottom: 1rem;">Required Angles:</h4>
+                    <ol class="numbered-list">
+                        <li><strong>Master Shot Sequence</strong> (Already complete from Lesson 2)</li>
+                        <li><strong>OTS on Character B</strong> (Complete sequence, all segments)</li>
+                        <li><strong>OTS on Character A</strong> (Complete sequence, all segments)</li>
+                        <li><strong>Close-Up on Character A</strong> (At least key emotional moments)</li>
+                        <li><strong>Close-Up on Character B</strong> (At least key reactions)</li>
+                    </ol>
+                </div>
+
+                <div style="background: rgba(6, 255, 165, 0.1); padding: 1.5rem; border-radius: 10px; margin: 1.5rem 0;">
+                    <h4 style="color: #06ffa5; margin-bottom: 1rem;">Deliverables:</h4>
+                    <ul class="checklist">
+                        <li>All video segments for each angle (organized in folders)</li>
+                        <li>All last frame images (saved and labeled)</li>
+                        <li>Text document with all prompts used for each angle</li>
+                        <li>A notes document describing any challenges and solutions</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h3>📁 Organization is Key</h3>
+                    <p style="font-size: 1.1rem;">Suggested folder structure:</p>
+                    <pre style="background: #0d1b2a; padding: 1rem; border-radius: 5px; margin-top: 1rem; overflow-x: auto;">
+/my_scene/
+  /master_shot/
+    - master_seg_01.mp4
+    - master_seg_02.mp4
+    - ...
+  /ots_character_b/
+    - ots_b_seg_01.mp4
+    - ots_b_seg_02.mp4
+    - ...
+  /ots_character_a/
+    - ots_a_seg_01.mp4
+    - ots_a_seg_02.mp4
+    - ...
+  /close_up_a/
+    - cu_a_seg_01.mp4
+    - ...
+  /close_up_b/
+    - cu_b_seg_01.mp4
+    - ...
+  /frames/
+    - (all extracted frames)
+  - prompts.txt
+  - notes.txt
+                    </pre>
+                </div>
+            </div>
+
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">⏱️</div>
+                    <h4 style="color: #00d4ff;">Time Management</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Budget 3-5 hours for complete coverage of a 30-second scene</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">💾</div>
+                    <h4 style="color: #00d4ff;">Save Everything</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Keep even failed attempts—document what didn't work</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">🔄</div>
+                    <h4 style="color: #00d4ff;">Iterate</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Don't settle for bad shots. Regenerate until you're satisfied</p>
+                </div>
+            </div>
+
+            <div class="critical-box" style="margin-top: 2rem;">
+                <h3>⚠️ Due Date</h3>
+                <p style="font-size: 1.2rem;">
+                    Next class session. Come ready to import all your footage into an editing timeline!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Looking Ahead -->
+    <div class="section content-section" data-section="11">
+        <div class="content-container">
+            <h2>Looking Ahead: Lesson 4</h2>
+            
+            <div class="key-concept">
+                Next: Assembly & Editing Your Scene
+            </div>
+
+            <p style="font-size: 1.1rem; margin: 2rem 0;">
+                With all your coverage generated, the next lesson will focus on the editorial process: cutting between angles, creating rhythm, and building a professional scene.
+            </p>
+
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">✂️</div>
+                    <h4 style="color: #00d4ff;">Traditional Editing</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Applying classic editing principles to AI-generated footage</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">🎵</div>
+                    <h4 style="color: #00d4ff;">Rhythm & Pacing</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">When to cut, how long to hold shots</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">🎬</div>
+                    <h4 style="color: #00d4ff;">Coverage Strategy</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Using the master as geography, close-ups for emotion</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">🔧</div>
+                    <h4 style="color: #00d4ff;">Problem Solving</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Fixing sync issues, smoothing transitions</p>
+                </div>
+            </div>
+
+            <div class="example-box" style="margin-top: 2rem;">
+                <h3>What to Bring to Next Class:</h3>
+                <ul class="checklist">
+                    <li>All your generated footage (organized by angle)</li>
+                    <li>Your editing software set up and ready</li>
+                    <li>Your script for reference</li>
+                    <li>A sense of how you want the scene to feel</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final Section -->
+    <div class="section title-section" data-section="12">
+        <div class="content-container" style="text-align: center;">
+            <h1 style="font-size: 3rem;">Time to Create Coverage!</h1>
+            <div class="key-concept" style="font-size: 1.3rem; margin-top: 2rem;">
+                "Every angle starts from the master image.<br>
+                Every angle tells the same story.<br>
+                Every angle gives you editorial choice."
+            </div>
+            <div style="margin-top: 3rem; font-size: 1.1rem; color: #a0a0a0;">
+                <p>John Treviño, MFA</p>
+                <p>UTRGV Theater Department</p>
+                <p>Fall 2025</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Intersection Observer for scroll animations
+        const sections = document.querySelectorAll('.section');
+        const navDots = document.getElementById('navigation');
+        const scrollIndicator = document.getElementById('scrollIndicator');
+
+        // Create navigation dots
+        sections.forEach((section, index) => {
+            const dot = document.createElement('div');
+            dot.className = 'nav-dot';
+            dot.addEventListener('click', () => {
+                section.scrollIntoView({ behavior: 'smooth' });
+            });
+            navDots.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.nav-dot');
+
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Update navigation dots
+                    const sectionIndex = entry.target.getAttribute('data-section');
+                    dots.forEach((dot, index) => {
+                        if (index == sectionIndex) {
+                            dot.classList.add('active');
+                        } else {
+                            dot.classList.remove('active');
+                        }
+                    });
+
+                    // Hide scroll indicator after first section
+                    if (sectionIndex > 0) {
+                        scrollIndicator.style.opacity = '0';
+                    } else {
+                        scrollIndicator.style.opacity = '1';
+                    }
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const currentSection = Array.from(sections).find(section => 
+                section.getBoundingClientRect().top >= 0 && 
+                section.getBoundingClientRect().top < window.innerHeight / 2
+            );
+            
+            if (!currentSection) return;
+            
+            const currentIndex = parseInt(currentSection.getAttribute('data-section'));
+            
+            if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+                e.preventDefault();
+                if (currentIndex < sections.length - 1) {
+                    sections[currentIndex + 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                e.preventDefault();
+                if (currentIndex > 0) {
+                    sections[currentIndex - 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

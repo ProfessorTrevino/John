@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Filmmaking - Lesson 4: Assembly & Editing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 20px;
+            position: relative;
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .section.animate-in {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .title-section {
+            background: linear-gradient(135deg, #3d0814 0%, #560a0a 100%);
+            text-align: center;
+        }
+
+        .content-section {
+            background: #0f0f0f;
+        }
+
+        .section:nth-child(even) {
+            background: #1a1a1a;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff4500, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient 3s ease infinite;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #ffd700;
+            border-bottom: 3px solid #ff4500;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem 0;
+            color: #ff4500;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #a0a0a0;
+            margin-bottom: 1rem;
+        }
+
+        .instructor-info {
+            font-size: 1.2rem;
+            color: #ffd700;
+            margin-top: 2rem;
+        }
+
+        .content-container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .objectives-list, .checklist {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .objectives-list li, .checklist li {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: rgba(255, 215, 0, 0.1);
+            border-left: 4px solid #ffd700;
+            border-radius: 4px;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .objectives-list li:hover, .checklist li:hover {
+            transform: translateX(10px);
+            background: rgba(255, 215, 0, 0.2);
+        }
+
+        .editing-principle {
+            background: linear-gradient(135deg, rgba(255, 69, 0, 0.2) 0%, rgba(255, 215, 0, 0.2) 100%);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 15px;
+            border: 2px solid #ff4500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .editing-principle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(180deg, #ff4500, #ffd700);
+        }
+
+        .principle-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .example-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 5px solid #ffd700;
+        }
+
+        .timeline-visual {
+            background: #3d0814;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            color: #ffd700;
+            margin: 1rem 0;
+            border: 1px solid #ff4500;
+            overflow-x: auto;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            margin: 0.2rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .tag.master {
+            background: #ffd700;
+            color: #0a0a0a;
+        }
+
+        .tag.ots {
+            background: #ff8c00;
+            color: #0a0a0a;
+        }
+
+        .tag.closeup {
+            background: #ff4500;
+            color: #ffffff;
+        }
+
+        .tag.cut {
+            background: #dc143c;
+            color: #ffffff;
+        }
+
+        .key-concept {
+            background: linear-gradient(135deg, #ff4500, #ffd700);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 2rem 0;
+            box-shadow: 0 10px 40px rgba(255, 69, 0, 0.3);
+        }
+
+        .warning-box {
+            background: rgba(220, 20, 60, 0.1);
+            border: 2px solid #dc143c;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+
+        .warning-box h3 {
+            color: #dc143c;
+            margin-top: 0;
+        }
+
+        .pro-tip {
+            background: rgba(255, 215, 0, 0.1);
+            border: 3px solid #ffd700;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+
+        .pro-tip h3 {
+            color: #ffd700;
+            margin-top: 0;
+            font-size: 2rem;
+        }
+
+        .editing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .editing-card {
+            background: rgba(255, 215, 0, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid #ffd700;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .editing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .card-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ff4500;
+            margin-bottom: 0.5rem;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .comparison-box {
+            padding: 2rem;
+            border-radius: 10px;
+            border: 2px solid;
+        }
+
+        .weak-edit {
+            border-color: #dc143c;
+            background: rgba(220, 20, 60, 0.1);
+        }
+
+        .strong-edit {
+            border-color: #ffd700;
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            font-size: 2rem;
+            z-index: 100;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-20px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+
+        .navigation {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: #ffd700;
+            transform: scale(1.5);
+        }
+
+        .nav-dot:hover {
+            background: #ff4500;
+            transform: scale(1.3);
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tip-card {
+            background: rgba(255, 69, 0, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid #ff4500;
+            transition: transform 0.3s ease;
+        }
+
+        .tip-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 69, 0, 0.2);
+        }
+
+        .tip-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            h2 {
+                font-size: 1.8rem;
+            }
+            .navigation {
+                display: none;
+            }
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .numbered-list {
+            counter-reset: item;
+            list-style: none;
+        }
+
+        .numbered-list li {
+            counter-increment: item;
+            margin: 1rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .numbered-list li::before {
+            content: counter(item);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #ffd700;
+            color: #0a0a0a;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .highlight {
+            background: rgba(255, 69, 0, 0.3);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #ff4500;
+        }
+
+        .shot-breakdown {
+            background: #560a0a;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid #ffd700;
+        }
+
+        .shot-row {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .shot-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+            min-width: 40px;
+        }
+
+        .rhythm-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .beat {
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 80px;
+            border: 2px solid;
+        }
+
+        .beat.long {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+            min-width: 120px;
+        }
+
+        .beat.medium {
+            background: rgba(255, 140, 0, 0.2);
+            border-color: #ff8c00;
+            min-width: 100px;
+        }
+
+        .beat.short {
+            background: rgba(255, 69, 0, 0.2);
+            border-color: #ff4500;
+            min-width: 80px;
+        }
+
+        .problem-solution {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255, 215, 0, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid #ff4500;
+        }
+
+        .problem-solution .problem {
+            color: #dc143c;
+            font-weight: bold;
+        }
+
+        .problem-solution .solution {
+            color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Dots -->
+    <div class="navigation" id="navigation">
+        <!-- Will be populated by JavaScript -->
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator" id="scrollIndicator">↓</div>
+
+    <!-- Title Section -->
+    <div class="section title-section" data-section="0">
+        <h1>AI Filmmaking</h1>
+        <div class="subtitle">The Master Image Method</div>
+        <div class="instructor-info">
+            John Treviño, MFA<br>
+            UTRGV Theater Department<br>
+            Fall 2025
+        </div>
+        <div style="margin-top: 3rem; font-size: 2rem; color: #ffd700;">
+            Lesson 4: Assembly & Editing Your Scene
+        </div>
+    </div>
+
+    <!-- Learning Objectives -->
+    <div class="section content-section" data-section="1">
+        <div class="content-container">
+            <h2>Learning Objectives</h2>
+            <p style="margin-bottom: 2rem; font-size: 1.1rem;">By the end of this lesson, students will:</p>
+            <ul class="objectives-list">
+                <li>Understand classical editing principles and how they apply to AI-generated footage</li>
+                <li>Master the art of cutting between angles for rhythm and emotion</li>
+                <li>Learn to use the master shot as a geography anchor</li>
+                <li>Solve common sync and continuity issues in the edit</li>
+                <li>Create a polished, professional final scene</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- What You Have -->
+    <div class="section content-section" data-section="2">
+        <div class="content-container">
+            <h2>Your Raw Materials</h2>
+            
+            <div class="key-concept">
+                You now have everything you need to create a professional scene
+            </div>
+
+            <div class="shot-breakdown">
+                <h3 style="color: #ffd700; text-align: center; margin-bottom: 2rem;">Your Coverage Arsenal</h3>
+                
+                <div class="shot-row">
+                    <div class="shot-icon">📹</div>
+                    <div>
+                        <strong style="color: #ffd700;">Master Shot Sequence</strong><br>
+                        <span style="color: #a0a0a0;">Wide shot covering entire scene - Your geography foundation</span>
+                    </div>
+                </div>
+
+                <div class="shot-row">
+                    <div class="shot-icon">👤</div>
+                    <div>
+                        <strong style="color: #ff8c00;">OTS on Character B</strong><br>
+                        <span style="color: #a0a0a0;">Complete sequence showing Character B's face</span>
+                    </div>
+                </div>
+
+                <div class="shot-row">
+                    <div class="shot-icon">👤</div>
+                    <div>
+                        <strong style="color: #ff8c00;">OTS on Character A</strong><br>
+                        <span style="color: #a0a0a0;">Complete sequence showing Character A's face</span>
+                    </div>
+                </div>
+
+                <div class="shot-row">
+                    <div class="shot-icon">😊</div>
+                    <div>
+                        <strong style="color: #ff4500;">Close-Up on Character A</strong><br>
+                        <span style="color: #a0a0a0;">Emotional beats and key moments</span>
+                    </div>
+                </div>
+
+                <div class="shot-row">
+                    <div class="shot-icon">😊</div>
+                    <div>
+                        <strong style="color: #ff4500;">Close-Up on Character B</strong><br>
+                        <span style="color: #a0a0a0;">Reactions and responses</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pro-tip">
+                <h3>💡 Pro Tip</h3>
+                <p style="font-size: 1.1rem;">
+                    Before you start editing, watch ALL your footage straight through. Get familiar with what you have, which takes work best, and where the natural emotional beats fall.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Editing Philosophy -->
+    <div class="section content-section" data-section="3">
+        <div class="content-container">
+            <h2>The Philosophy of Coverage Editing</h2>
+            
+            <div class="editing-principle">
+                <div class="principle-icon">🎬</div>
+                <h3 style="color: #ff4500; margin-top: 0;">Principle #1: The Master Establishes</h3>
+                <p style="font-size: 1.1rem;">
+                    Use the master shot to <strong>establish geography</strong>. Start your scene with the master so the audience knows where everyone is. Return to it when spatial relationships might be confusing.
+                </p>
+            </div>
+
+            <div class="editing-principle">
+                <div class="principle-icon">💬</div>
+                <h3 style="color: #ff4500; margin-top: 0;">Principle #2: OTS for Conversation</h3>
+                <p style="font-size: 1.1rem;">
+                    Over-the-shoulder shots are the <strong>workhorses of dialogue</strong>. They show who's talking, who's listening, and maintain screen direction. Use them for the "normal" flow of conversation.
+                </p>
+            </div>
+
+            <div class="editing-principle">
+                <div class="principle-icon">😢</div>
+                <h3 style="color: #ff4500; margin-top: 0;">Principle #3: Close-Ups for Emotion</h3>
+                <p style="font-size: 1.1rem;">
+                    Close-ups are your <strong>emotional amplifiers</strong>. Use them sparingly for maximum impact. Save them for the most important lines, realizations, or reactions.
+                </p>
+            </div>
+
+            <div class="editing-principle">
+                <div class="principle-icon">⚡</div>
+                <h3 style="color: #ff4500; margin-top: 0;">Principle #4: Cut for Reason</h3>
+                <p style="font-size: 1.1rem;">
+                    Every cut should have a <strong>purpose</strong>. Cut to show a reaction, emphasize a line, reveal new information, or change the energy of the scene. Never cut just because you can.
+                </p>
+            </div>
+
+            <div class="key-concept">
+                "The best editing is invisible—<br>the audience should feel the scene, not notice the cuts"
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 1: Timeline Setup -->
+    <div class="section content-section" data-section="4">
+        <div class="content-container">
+            <h2>Step 1: Timeline Setup</h2>
+            
+            <div class="editing-card" style="background: rgba(255, 215, 0, 0.15); border-width: 3px;">
+                <h3 style="margin-top: 0; color: #ffd700;">Organize Your Timeline</h3>
+                
+                <p style="font-size: 1.1rem; margin: 1.5rem 0;">
+                    A well-organized timeline makes editing faster and more creative. Here's the recommended setup:
+                </p>
+
+                <div class="timeline-visual">
+VIDEO TRACK 4: [Close-Ups]
+VIDEO TRACK 3: [OTS Shots]  
+VIDEO TRACK 2: [Master Shot - Reference]
+VIDEO TRACK 1: [Active Edit]
+
+AUDIO TRACK 1: [Dialogue from best angle]
+AUDIO TRACK 2: [Music/SFX]
+                </div>
+
+                <div class="example-box">
+                    <h3>Track-by-Track Breakdown:</h3>
+                    <ul class="checklist">
+                        <li><strong>V4 - Close-Ups:</strong> Keep all CU segments here, ready to drop in</li>
+                        <li><strong>V3 - OTS Shots:</strong> Both OTS angles organized and accessible</li>
+                        <li><strong>V2 - Master Shot Reference:</strong> Full master sequence, locked, for timing reference</li>
+                        <li><strong>V1 - Active Edit:</strong> Your actual cut—start with master, then replace/layer</li>
+                        <li><strong>A1 - Dialogue:</strong> Extract best audio, sync all angles to this</li>
+                        <li><strong>A2 - Music/SFX:</strong> Additional audio elements</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pro-tip">
+                <h3>💡 Workflow Tip</h3>
+                <p style="font-size: 1.1rem;">
+                    <strong>Lock your master shot on V2.</strong> This prevents you from accidentally moving it and gives you a constant reference for timing. You can always glance up to see where you are in the scene.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 2: The Rough Cut -->
+    <div class="section content-section" data-section="5">
+        <div class="content-container">
+            <h2>Step 2: Build Your Rough Cut</h2>
+            
+            <div class="editing-grid">
+                <div class="editing-card">
+                    <div class="card-number">1</div>
+                    <h4 style="color: #ffd700;">Start with Master</h4>
+                    <p style="font-size: 0.95rem; margin-top: 0.5rem;">Place your full master shot sequence on V1. This is your foundation.</p>
+                </div>
+                <div class="editing-card">
+                    <div class="card-number">2</div>
+                    <h4 style="color: #ffd700;">Watch It Through</h4>
+                    <p style="font-size: 0.95rem; margin-top: 0.5rem;">Play the master shot and note where you want to cut. Mark these moments.</p>
+                </div>
+                <div class="editing-card">
+                    <div class="card-number">3</div>
+                    <h4 style="color: #ffd700;">Add OTS Coverage</h4>
+                    <p style="font-size: 0.95rem; margin-top: 0.5rem;">Replace sections with OTS shots. Start with full exchanges, not individual words.</p>
+                </div>
+                <div class="editing-card">
+                    <div class="card-number">4</div>
+                    <h4 style="color: #ffd700;">Layer Close-Ups</h4>
+                    <p style="font-size: 0.95rem; margin-top: 0.5rem;">Drop in close-ups on top for key emotional moments. These go on V4.</p>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Typical Scene Structure:</h3>
+                <div class="rhythm-diagram">
+                    <div class="beat long">
+                        <span class="tag master">MASTER</span><br>
+                        <small>Establish</small>
+                    </div>
+                    <div style="color: #ff4500; font-size: 1.5rem;">→</div>
+                    <div class="beat medium">
+                        <span class="tag ots">OTS-B</span><br>
+                        <small>Dialogue</small>
+                    </div>
+                    <div style="color: #ff4500; font-size: 1.5rem;">→</div>
+                    <div class="beat medium">
+                        <span class="tag ots">OTS-A</span><br>
+                        <small>Response</small>
+                    </div>
+                    <div style="color: #ff4500; font-size: 1.5rem;">→</div>
+                    <div class="beat short">
+                        <span class="tag closeup">CU-B</span><br>
+                        <small>React</small>
+                    </div>
+                    <div style="color: #ff4500; font-size: 1.5rem;">→</div>
+                    <div class="beat short">
+                        <span class="tag closeup">CU-A</span><br>
+                        <small>Impact</small>
+                    </div>
+                    <div style="color: #ff4500; font-size: 1.5rem;">→</div>
+                    <div class="beat long">
+                        <span class="tag master">MASTER</span><br>
+                        <small>Reset</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h3>⚠️ Don't Over-Cut Yet</h3>
+                <p style="font-size: 1.1rem;">
+                    In the rough cut phase, work in <strong>larger chunks</strong>. Don't worry about exact frame precision yet. Get the general flow of the scene working first, then tighten later.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- When to Cut -->
+    <div class="section content-section" data-section="6">
+        <div class="content-container">
+            <h2>When to Cut Between Angles</h2>
+            
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">🗣️</div>
+                    <h4 style="color: #ff4500;">On Speaker Change</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">When a new character starts talking, cut to them (or to OTS favoring them)</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">😮</div>
+                    <h4 style="color: #ff4500;">On Reaction</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Cut to show how a character responds to what they just heard</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">💥</div>
+                    <h4 style="color: #ff4500;">On Important Line</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Cut to close-up just before (or during) a crucial line of dialogue</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">⏸️</div>
+                    <h4 style="color: #ff4500;">On Pause/Beat</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Natural pauses are great moments to change angles</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">🔄</div>
+                    <h4 style="color: #ff4500;">For Energy Shift</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">When the scene's tone changes, a new angle reinforces that</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">📍</div>
+                    <h4 style="color: #ff4500;">To Re-Establish</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">After many cuts, return to master to remind viewers of space</p>
+                </div>
+            </div>
+
+            <div class="comparison-grid">
+                <div class="comparison-box weak-edit">
+                    <h3 style="color: #dc143c;">❌ Weak Cutting</h3>
+                    <ul style="margin-top: 1rem; font-size: 0.95rem;">
+                        <li>Cutting in the middle of a word</li>
+                        <li>Random cuts with no motivation</li>
+                        <li>Cutting too frequently (every second)</li>
+                        <li>Staying on one angle too long</li>
+                        <li>Never returning to master shot</li>
+                        <li>Overusing close-ups</li>
+                    </ul>
+                </div>
+
+                <div class="comparison-box strong-edit">
+                    <h3 style="color: #ffd700;">✓ Strong Cutting</h3>
+                    <ul style="margin-top: 1rem; font-size: 0.95rem;">
+                        <li>Cuts motivated by action/emotion</li>
+                        <li>Rhythm that matches scene energy</li>
+                        <li>Variety in shot duration</li>
+                        <li>Strategic use of close-ups</li>
+                        <li>Master establishes, then coverage</li>
+                        <li>Each cut serves the story</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rhythm & Pacing -->
+    <div class="section content-section" data-section="7">
+        <div class="content-container">
+            <h2>Rhythm & Pacing</h2>
+            
+            <div class="key-concept">
+                Editing is music—it's all about rhythm
+            </div>
+
+            <div class="editing-principle">
+                <h3 style="color: #ff4500; margin-top: 0;">Shot Duration Creates Feeling</h3>
+                
+                <div style="margin: 2rem 0;">
+                    <div style="background: rgba(255, 215, 0, 0.1); padding: 1.5rem; border-radius: 10px; margin: 1rem 0; border-left: 5px solid #ffd700;">
+                        <h4 style="color: #ffd700;">Long Holds (5+ seconds)</h4>
+                        <p style="margin-top: 0.5rem;">Create <strong>contemplation, tension, weight</strong>. Use for emotional moments where you want the audience to sit with a character.</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #a0a0a0;">Example: Hold on a character's face as they process devastating news.</p>
+                    </div>
+
+                    <div style="background: rgba(255, 140, 0, 0.1); padding: 1.5rem; border-radius: 10px; margin: 1rem 0; border-left: 5px solid #ff8c00;">
+                        <h4 style="color: #ff8c00;">Medium Beats (2-4 seconds)</h4>
+                        <p style="margin-top: 0.5rem;">The <strong>standard conversational rhythm</strong>. Comfortable pacing that feels natural for most dialogue.</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #a0a0a0;">Example: OTS shots cutting back and forth in a normal conversation.</p>
+                    </div>
+
+                    <div style="background: rgba(255, 69, 0, 0.1); padding: 1.5rem; border-radius: 10px; margin: 1rem 0; border-left: 5px solid #ff4500;">
+                        <h4 style="color: #ff4500;">Quick Cuts (1-2 seconds)</h4>
+                        <p style="margin-top: 0.5rem;">Generate <strong>energy, urgency, intensity</strong>. Use sparingly for arguments, revelations, or heightened emotion.</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #a0a0a0;">Example: Rapid cutting between faces during an argument.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Rhythm Example: Breakup Scene</h3>
+                <div class="timeline-visual">
+[00:00] MASTER - 4sec - Establish park bench, both characters
+[00:04] OTS-B - 3sec - Man: "I think we need to talk"
+[00:07] OTS-A - 2sec - Woman: "What's wrong?"
+[00:09] OTS-B - 3sec - Man: "I'm breaking up with you"
+[00:12] CU-A - 5sec - Woman's face, shock → sadness (reaction)
+[00:17] CU-B - 3sec - Man looks away, conflicted
+[00:20] MASTER - 4sec - Pull back, show distance between them
+                </div>
+                <p style="margin-top: 1rem; color: #ffd700;">
+                    <strong>Note the rhythm:</strong> Establish → Quick exchange → HOLD on the emotional reaction → Resolution
+                </p>
+            </div>
+
+            <div class="pro-tip">
+                <h3>💡 The Power of Silence</h3>
+                <p style="font-size: 1.1rem;">
+                    Some of your most powerful moments will have no dialogue. Don't be afraid to hold on a reaction shot in silence. Let the audience feel the emotion.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Solving Sync Issues -->
+    <div class="section content-section" data-section="8">
+        <div class="content-container">
+            <h2>Solving Common Problems</h2>
+            
+            <div class="warning-box">
+                <h3>🔧 Problem-Solving in the Edit</h3>
+                <p style="font-size: 1.1rem;">
+                    AI-generated footage will have imperfections. Here's how to work around them:
+                </p>
+            </div>
+
+            <div style="margin: 2rem 0;">
+                <div class="problem-solution">
+                    <div class="problem">Lip-Sync is Off</div>
+                    <div class="solution">
+                        <strong>Solution:</strong> Use reaction shots where the character isn't speaking. Cut to the listener, or use the master where lip-sync isn't as noticeable. If possible, adjust audio timing by a few frames.
+                    </div>
+                </div>
+
+                <div class="problem-solution">
+                    <div class="problem">Dialogue Doesn't Match</div>
+                    <div class="solution">
+                        <strong>Solution:</strong> Pick the BEST audio from one angle and use it for all angles. Sync all video angles to this single audio track. This guarantees perfect sync.
+                    </div>
+                </div>
+
+                <div class="problem-solution">
+                    <div class="problem">Character Looks Different</div>
+                    <div class="solution">
+                        <strong>Solution:</strong> Use that angle less. Don't linger on shots where continuity is broken. Quick cuts help hide small differences.
+                    </div>
+                </div>
+
+                <div class="problem-solution">
+                    <div class="problem">Jarring Transition</div>
+                    <div class="solution">
+                        <strong>Solution:</strong> Add a brief cutaway (reaction shot, insert, or return to master) to smooth the transition. The cutaway acts as a visual "palate cleanser."
+                    </div>
+                </div>
+
+                <div class="problem-solution">
+                    <div class="problem">Awkward Pause/Gap</div>
+                    <div class="solution">
+                        <strong>Solution:</strong> Use a reaction shot during the pause, or cut to the master to let the moment breathe. Don't rush to fill silence.
+                    </div>
+                </div>
+
+                <div class="problem-solution">
+                    <div class="problem">Not Enough Coverage</div>
+                    <div class="solution">
+                        <strong>Solution:</strong> Use the master shot more. If you're short on close-ups or OTS shots, the master can carry the scene. It's your safety net.
+                    </div>
+                </div>
+
+                <div class="problem-solution">
+                    <div class="problem">Too Much Coverage</div>
+                    <div class="solution">
+                        <strong>Solution:</strong> Be selective. Just because you generated an angle doesn't mean you need to use it. Edit ruthlessly—only include what serves the story.
+                    </div>
+                </div>
+            </div>
+
+            <div class="pro-tip">
+                <h3>💡 Pro Editor Trick: The L-Cut and J-Cut</h3>
+                <p style="font-size: 1.1rem; margin-bottom: 1rem;">
+                    These are your secret weapons for smooth transitions:
+                </p>
+                <ul class="checklist">
+                    <li><strong>L-Cut:</strong> Audio from Shot A continues into Shot B (visual cuts, audio lags)</li>
+                    <li><strong>J-Cut:</strong> Audio from Shot B starts before we see Shot B (audio leads, visual follows)</li>
+                </ul>
+                <p style="margin-top: 1rem; font-size: 1rem; color: #a0a0a0;">
+                    These techniques make cuts feel more natural and help with sync issues.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Polishing -->
+    <div class="section content-section" data-section="9">
+        <div class="content-container">
+            <h2>Step 3: Polish Your Edit</h2>
+            
+            <div class="editing-grid">
+                <div class="editing-card">
+                    <div class="tip-icon">🎯</div>
+                    <h4 style="color: #ffd700;">Trim the Fat</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Remove any dead air, awkward pauses, or shots that don't serve the story. Be ruthless.</p>
+                </div>
+                <div class="editing-card">
+                    <div class="tip-icon">🎚️</div>
+                    <h4 style="color: #ffd700;">Balance Audio</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Ensure dialogue is clear and consistent. Add subtle music or ambient sound if appropriate.</p>
+                </div>
+                <div class="editing-card">
+                    <div class="tip-icon">🎨</div>
+                    <h4 style="color: #ffd700;">Color Correct</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Match color between angles if needed. AI can create slight differences—blend them in post.</p>
+                </div>
+                <div class="editing-card">
+                    <div class="tip-icon">✂️</div>
+                    <h4 style="color: #ffd700;">Fine-Tune Cuts</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Adjust cut points by a few frames. Sometimes moving a cut by 2-3 frames makes it perfect.</p>
+                </div>
+                <div class="editing-card">
+                    <div class="tip-icon">👂</div>
+                    <h4 style="color: #ffd700;">Watch Without Video</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Close your eyes and listen. Does the audio tell a clear story? Fix awkward transitions.</p>
+                </div>
+                <div class="editing-card">
+                    <div class="tip-icon">👁️</div>
+                    <h4 style="color: #ffd700;">Watch Without Audio</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Mute the dialogue. Does the visual storytelling work on its own? Adjust shot choices.</p>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h3>⚠️ The Fresh Eyes Test</h3>
+                <p style="font-size: 1.1rem;">
+                    After polishing, <strong>take a break</strong>. Come back in an hour (or the next day) and watch your scene with fresh eyes. You'll notice things you missed before.
+                </p>
+            </div>
+
+            <div class="example-box">
+                <h3>Final Checklist:</h3>
+                <ul class="checklist">
+                    <li>✓ Scene establishes geography clearly (master shot at beginning)</li>
+                    <li>✓ Every cut is motivated and purposeful</li>
+                    <li>✓ Rhythm matches the emotional tone</li>
+                    <li>✓ Close-ups are used sparingly for impact</li>
+                    <li>✓ Audio is clean and balanced</li>
+                    <li>✓ No jarring continuity breaks</li>
+                    <li>✓ Scene has a clear beginning, middle, and end</li>
+                    <li>✓ Emotional beats land effectively</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- In-Class Exercise -->
+    <div class="section content-section" data-section="10">
+        <div class="content-container">
+            <h2>In-Class Exercise</h2>
+            
+            <div class="editing-principle" style="border-color: #ffd700; background: rgba(255, 215, 0, 0.15);">
+                <h3 style="margin-top: 0; color: #ffd700;">Build Your Rough Cut</h3>
+                
+                <p style="font-size: 1.1rem; margin: 1.5rem 0;">
+                    Today, you'll assemble the rough cut of your scene using all your coverage.
+                </p>
+
+                <ol class="numbered-list">
+                    <li>Set up your timeline with proper track organization</li>
+                    <li>Place your master shot on V2 (locked reference track)</li>
+                    <li>Build your edit on V1, starting with the full master</li>
+                    <li>Replace sections with OTS coverage</li>
+                    <li>Add close-ups on V4 for key moments</li>
+                    <li>Watch through and make notes on problem areas</li>
+                    <li>Make at least one revision pass</li>
+                </ol>
+            </div>
+
+            <div class="pro-tip">
+                <h3>💡 Class Feedback</h3>
+                <p style="font-size: 1.1rem;">
+                    We'll watch rough cuts together and provide feedback. Focus on: <strong>Does the story make sense? Do the cuts feel motivated? Are emotional beats landing?</strong>
+                </p>
+            </div>
+
+            <div class="warning-box">
+                <h3>✅ Success Criteria for Rough Cut</h3>
+                <ul class="checklist">
+                    <li>Scene flows logically from start to finish</li>
+                    <li>At least 3 different angles used</li>
+                    <li>Master shot establishes geography</li>
+                    <li>Close-ups used for at least one emotional moment</li>
+                    <li>Audio is synced (even if not perfect)</li>
+                    <li>Total scene length: 20-45 seconds</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Homework -->
+    <div class="section content-section" data-section="11">
+        <div class="content-container">
+            <h2>Homework Assignment</h2>
+            
+            <div class="shot-breakdown" style="background: linear-gradient(135deg, #3d0814, #560a0a); border-color: #ffd700;">
+                <h3 style="text-align: center; color: #ffd700; margin-bottom: 2rem;">Final Polish & Export</h3>
+                
+                <div style="background: rgba(255, 215, 0, 0.1); padding: 2rem; border-radius: 10px; margin: 1.5rem 0;">
+                    <h4 style="color: #ffd700; margin-bottom: 1rem;">Deliverables:</h4>
+                    <ol class="numbered-list">
+                        <li><strong>Final Edited Scene</strong> - Exported as MP4 or MOV (H.264, 1080p minimum)</li>
+                        <li><strong>Project File</strong> - Your editing timeline file saved and backed up</li>
+                        <li><strong>Shot List Document</strong> - List every shot used with timecodes and why you chose it</li>
+                        <li><strong>Artist Statement</strong> - 1 page reflection on your creative choices</li>
+                    </ol>
+                </div>
+
+                <div style="background: rgba(255, 69, 0, 0.1); padding: 2rem; border-radius: 10px; margin: 1.5rem 0;">
+                    <h4 style="color: #ff4500; margin-bottom: 1rem;">Polish Requirements:</h4>
+                    <ul class="checklist">
+                        <li>All cuts must be intentional and motivated</li>
+                        <li>Audio balanced and clear throughout</li>
+                        <li>No visible technical errors or glitches</li>
+                        <li>Color consistency between angles (or creative grade applied)</li>
+                        <li>Smooth transitions (no jarring jumps)</li>
+                        <li>Optional: Add music, sound effects, or titles</li>
+                    </ul>
+                </div>
+
+                <div style="background: rgba(255, 215, 0, 0.1); padding: 2rem; border-radius: 10px; margin: 1.5rem 0;">
+                    <h4 style="color: #ffd700; margin-bottom: 1rem;">Artist Statement Should Address:</h4>
+                    <ul style="margin-left: 1.5rem; margin-top: 1rem;">
+                        <li>What story were you trying to tell?</li>
+                        <li>What were your key creative decisions in the edit?</li>
+                        <li>Which shot was most effective and why?</li>
+                        <li>What challenges did you face and how did you solve them?</li>
+                        <li>What would you do differently next time?</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">💾</div>
+                    <h4 style="color: #ff4500;">Export Settings</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">H.264, 1080p, 24fps (or 30fps), high quality preset</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">📝</div>
+                    <h4 style="color: #ff4500;">Documentation</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Keep notes on every creative decision—this helps with the artist statement</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">🎬</div>
+                    <h4 style="color: #ff4500;">Test Screening</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Show your scene to a friend before final submission. Fresh eyes catch issues.</p>
+                </div>
+            </div>
+
+            <div class="pro-tip" style="margin-top: 2rem;">
+                <h3>⚠️ Due Date & Presentation</h3>
+                <p style="font-size: 1.2rem;">
+                    <strong>Next class session.</strong> Come prepared to screen your final scene and discuss your creative process. We'll have a group critique and celebration!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conclusion -->
+    <div class="section content-section" data-section="12">
+        <div class="content-container">
+            <h2>Beyond This Course</h2>
+            
+            <div class="key-concept">
+                You now have a complete AI filmmaking workflow
+            </div>
+
+            <div class="editing-principle" style="border: none; background: rgba(255, 215, 0, 0.1);">
+                <h3 style="color: #ffd700; margin-top: 0;">What You've Learned</h3>
+                <div class="editing-grid">
+                    <div style="text-align: center; padding: 1rem;">
+                        <div style="font-size: 3rem; margin-bottom: 0.5rem;">1️⃣</div>
+                        <strong>Master Image Method</strong><br>
+                        <small>Creating continuity from a single source</small>
+                    </div>
+                    <div style="text-align: center; padding: 1rem;">
+                        <div style="font-size: 3rem; margin-bottom: 0.5rem;">2️⃣</div>
+                        <strong>Chaining Technique</strong><br>
+                        <small>Extending clips into sequences</small>
+                    </div>
+                    <div style="text-align: center; padding: 1rem;">
+                        <div style="font-size: 3rem; margin-bottom: 0.5rem;">3️⃣</div>
+                        <strong>Coverage Generation</strong><br>
+                        <small>Multiple angles from one image</small>
+                    </div>
+                    <div style="text-align: center; padding: 1rem;">
+                        <div style="font-size: 3rem; margin-bottom: 0.5rem;">4️⃣</div>
+                        <strong>Classical Editing</strong><br>
+                        <small>Professional scene construction</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Next Steps for Your AI Filmmaking Journey:</h3>
+                <ul class="checklist">
+                    <li><strong>Experiment with genres:</strong> Try action, comedy, horror—each requires different coverage strategies</li>
+                    <li><strong>Push the boundaries:</strong> Test what AI can and can't do. Document your discoveries</li>
+                    <li><strong>Combine techniques:</strong> Mix AI footage with practical shots or motion graphics</li>
+                    <li><strong>Tell bigger stories:</strong> Use this method to create short films with multiple scenes</li>
+                    <li><strong>Share your work:</strong> The AI filmmaking community is growing—contribute to it</li>
+                </ul>
+            </div>
+
+            <div class="pro-tip">
+                <h3>💡 Final Thought</h3>
+                <p style="font-size: 1.2rem;">
+                    AI tools will continue to evolve rapidly. The <strong>principles</strong> you learned here—continuity, coverage, rhythm, motivation—are timeless. Master these fundamentals, and you'll adapt to whatever new tools emerge.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final Section -->
+    <div class="section title-section" data-section="13">
+        <div class="content-container" style="text-align: center;">
+            <h1 style="font-size: 3rem;">You're Now an AI Filmmaker</h1>
+            <div class="key-concept" style="font-size: 1.3rem; margin-top: 2rem;">
+                "Every great film is made three times:<br>
+                First in writing, second in shooting, third in editing."<br>
+                <small style="font-size: 0.8rem; color: #a0a0a0;">— You've now mastered all three in the AI realm</small>
+            </div>
+            <div style="margin-top: 3rem; font-size: 1.1rem; color: #a0a0a0;">
+                <p>John Treviño, MFA</p>
+                <p>UTRGV Theater Department</p>
+                <p>Fall 2025</p>
+            </div>
+            <div style="margin-top: 2rem; font-size: 1rem; color: #ffd700;">
+                <p>🎬 Now go make something amazing! 🎬</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Intersection Observer for scroll animations
+        const sections = document.querySelectorAll('.section');
+        const navDots = document.getElementById('navigation');
+        const scrollIndicator = document.getElementById('scrollIndicator');
+
+        // Create navigation dots
+        sections.forEach((section, index) => {
+            const dot = document.createElement('div');
+            dot.className = 'nav-dot';
+            dot.addEventListener('click', () => {
+                section.scrollIntoView({ behavior: 'smooth' });
+            });
+            navDots.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.nav-dot');
+
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Update navigation dots
+                    const sectionIndex = entry.target.getAttribute('data-section');
+                    dots.forEach((dot, index) => {
+                        if (index == sectionIndex) {
+                            dot.classList.add('active');
+                        } else {
+                            dot.classList.remove('active');
+                        }
+                    });
+
+                    // Hide scroll indicator after first section
+                    if (sectionIndex > 0) {
+                        scrollIndicator.style.opacity = '0';
+                    } else {
+                        scrollIndicator.style.opacity = '1';
+                    }
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const currentSection = Array.from(sections).find(section => 
+                section.getBoundingClientRect().top >= 0 && 
+                section.getBoundingClientRect().top < window.innerHeight / 2
+            );
+            
+            if (!currentSection) return;
+            
+            const currentIndex = parseInt(currentSection.getAttribute('data-section'));
+            
+            if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+                e.preventDefault();
+                if (currentIndex < sections.length - 1) {
+                    sections[currentIndex + 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                e.preventDefault();
+                if (currentIndex > 0) {
+                    sections[currentIndex - 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

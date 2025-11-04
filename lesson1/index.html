@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Filmmaking - Lesson 1: The Master Image Method</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 20px;
+            position: relative;
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .section.animate-in {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .title-section {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            text-align: center;
+        }
+
+        .content-section {
+            background: #0f0f0f;
+        }
+
+        .section:nth-child(even) {
+            background: #1a1a1a;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient 3s ease infinite;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #4ecdc4;
+            border-bottom: 3px solid #ff6b6b;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem 0;
+            color: #ff6b6b;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #a0a0a0;
+            margin-bottom: 1rem;
+        }
+
+        .instructor-info {
+            font-size: 1.2rem;
+            color: #4ecdc4;
+            margin-top: 2rem;
+        }
+
+        .content-container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .objectives-list, .checklist {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .objectives-list li, .checklist li {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: rgba(78, 205, 196, 0.1);
+            border-left: 4px solid #4ecdc4;
+            border-radius: 4px;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .objectives-list li:hover, .checklist li:hover {
+            transform: translateX(10px);
+            background: rgba(78, 205, 196, 0.2);
+        }
+
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .comparison-box {
+            padding: 2rem;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .comparison-box:hover {
+            transform: scale(1.05);
+        }
+
+        .wrong-way {
+            background: rgba(255, 107, 107, 0.1);
+            border: 2px solid #ff6b6b;
+        }
+
+        .right-way {
+            background: rgba(78, 205, 196, 0.1);
+            border: 2px solid #4ecdc4;
+        }
+
+        .example-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 5px solid #4ecdc4;
+        }
+
+        .good-example {
+            border-left-color: #4ecdc4;
+        }
+
+        .bad-example {
+            border-left-color: #ff6b6b;
+        }
+
+        .prompt-template {
+            background: #1a1a2e;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            color: #4ecdc4;
+            margin: 1rem 0;
+            border: 1px solid #4ecdc4;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            margin: 0.2rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .tag.good {
+            background: #4ecdc4;
+            color: #0a0a0a;
+        }
+
+        .tag.bad {
+            background: #ff6b6b;
+            color: #0a0a0a;
+        }
+
+        .key-concept {
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 2rem 0;
+            box-shadow: 0 10px 40px rgba(78, 205, 196, 0.3);
+        }
+
+        .discussion-questions {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+
+        .discussion-questions li {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .discussion-questions li::before {
+            content: "💬";
+            position: absolute;
+            left: 0;
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            font-size: 2rem;
+            z-index: 100;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-20px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+
+        .navigation {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: #4ecdc4;
+            transform: scale(1.5);
+        }
+
+        .nav-dot:hover {
+            background: #ff6b6b;
+            transform: scale(1.3);
+        }
+
+        .assignment-box {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border: 2px solid #4ecdc4;
+        }
+
+        .criteria-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .criteria-item {
+            background: rgba(78, 205, 196, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .criteria-item:hover {
+            transform: translateY(-5px);
+            background: rgba(78, 205, 196, 0.2);
+        }
+
+        .percentage {
+            font-size: 2rem;
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            h2 {
+                font-size: 1.8rem;
+            }
+            .comparison-container {
+                grid-template-columns: 1fr;
+            }
+            .navigation {
+                display: none;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        ul {
+            list-style-position: inside;
+        }
+
+        .numbered-list {
+            counter-reset: item;
+            list-style: none;
+        }
+
+        .numbered-list li {
+            counter-increment: item;
+            margin: 1rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .numbered-list li::before {
+            content: counter(item);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #4ecdc4;
+            color: #0a0a0a;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Dots -->
+    <div class="navigation" id="navigation">
+        <!-- Will be populated by JavaScript -->
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator" id="scrollIndicator">↓</div>
+
+    <!-- Title Section -->
+    <div class="section title-section" data-section="0">
+        <h1>AI Filmmaking</h1>
+        <div class="subtitle">The Master Image Method</div>
+        <div class="instructor-info">
+            John Treviño, MFA<br>
+            UTRGV Theater Department<br>
+            Fall 2025
+        </div>
+        <div style="margin-top: 3rem; font-size: 2rem; color: #4ecdc4;">
+            Lesson 1: Foundations
+        </div>
+    </div>
+
+    <!-- Learning Objectives -->
+    <div class="section content-section" data-section="1">
+        <div class="content-container">
+            <h2>Learning Objectives</h2>
+            <p style="margin-bottom: 2rem; font-size: 1.1rem;">By the end of this lesson, students will:</p>
+            <ul class="objectives-list">
+                <li>Understand why AI video generation requires a different workflow than traditional filmmaking</li>
+                <li>Identify the visual continuity problems inherent in AI video generation</li>
+                <li>Create a high-quality master image suitable for multi-angle scene construction</li>
+                <li>Evaluate what makes a master image effective or ineffective</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Part 1: The Problem -->
+    <div class="section content-section" data-section="2">
+        <div class="content-container">
+            <h2>Part 1: The Problem</h2>
+            <h3>Opening Exercise: "The Continuity Disaster"</h3>
+            
+            <div class="comparison-container">
+                <div class="comparison-box wrong-way">
+                    <h3 style="color: #ff6b6b;">❌ The Wrong Way</h3>
+                    <p><strong>Each clip generated independently:</strong></p>
+                    <ul style="margin-top: 1rem;">
+                        <li>Shot 1: "Two people on a park bench at sunset"</li>
+                        <li>Shot 2: "Close-up of woman in red dress"</li>
+                        <li>Shot 3: "Man responds angrily"</li>
+                    </ul>
+                    <p style="margin-top: 1rem; color: #ff6b6b;"><strong>Issues:</strong></p>
+                    <ul>
+                        <li>Woman's dress color changed</li>
+                        <li>Man's hair is different</li>
+                        <li>Bench style shifted</li>
+                        <li>Lighting inconsistent</li>
+                    </ul>
+                </div>
+
+                <div class="comparison-box right-way">
+                    <h3 style="color: #4ecdc4;">✓ The Right Way</h3>
+                    <p><strong>Using the Master Image Method:</strong></p>
+                    <ul style="margin-top: 1rem;">
+                        <li>All shots from ONE source image</li>
+                        <li>Perfect continuity maintained</li>
+                        <li>Characters identical</li>
+                        <li>Wardrobe consistent</li>
+                        <li>Location unchanged</li>
+                    </ul>
+                    <p style="margin-top: 1rem; color: #4ecdc4;"><strong>Result:</strong></p>
+                    <p>Professional, editable scene coverage!</p>
+                </div>
+            </div>
+
+            <div class="discussion-questions">
+                <h3>Discussion Questions:</h3>
+                <ul>
+                    <li>What did you notice about the first example?</li>
+                    <li>Why can't we just describe everything perfectly in each prompt?</li>
+                    <li>How is this different from traditional filmmaking where continuity is controlled on set?</li>
+                </ul>
+            </div>
+
+            <div class="key-concept">
+                "In traditional film, continuity lives on set.<br>
+                In AI film, continuity lives in the source image."
+            </div>
+        </div>
+    </div>
+
+    <!-- Part 2: Understanding the Master Image -->
+    <div class="section content-section" data-section="3">
+        <div class="content-container">
+            <h2>Part 2: Understanding the Master Image</h2>
+            
+            <h3>What Makes a Good Master Image?</h3>
+            <p style="margin-bottom: 1rem; font-size: 1.1rem;">The Non-Negotiables:</p>
+            
+            <ul class="numbered-list">
+                <li><strong>Spatial Clarity:</strong> All key characters visible with clear spatial relationships</li>
+                <li><strong>Wide Enough:</strong> Room for the camera to "move" to different angles</li>
+                <li><strong>Narrative Information:</strong> The setting tells us something about the scene</li>
+                <li><strong>Lighting Consistency:</strong> Lighting that can work for multiple angles</li>
+                <li><strong>Character Definition:</strong> Faces, costumes, and key props clearly visible</li>
+            </ul>
+
+            <div class="example-box good-example">
+                <h3>✓ GOOD Example:</h3>
+                <div class="prompt-template">
+                    "Cinematic wide shot, two adults sitting on opposite ends of a wooden park bench at golden hour sunset, man on left in blue button-down shirt and jeans, woman on right in red sundress, oak trees in background, natural lighting, photorealistic"
+                </div>
+                <p style="margin-top: 1rem;"><strong>Why it works:</strong></p>
+                <div>
+                    <span class="tag good">✓ Both characters fully visible</span>
+                    <span class="tag good">✓ Clear left/right positioning</span>
+                    <span class="tag good">✓ Specific wardrobe details</span>
+                    <span class="tag good">✓ Defined setting</span>
+                    <span class="tag good">✓ Room to reframe to either character</span>
+                </div>
+            </div>
+
+            <div class="example-box bad-example">
+                <h3>❌ POOR Example:</h3>
+                <div class="prompt-template" style="border-color: #ff6b6b; color: #ff6b6b;">
+                    "Two people talking, dramatic lighting"
+                </div>
+                <p style="margin-top: 1rem;"><strong>Why it fails:</strong></p>
+                <div>
+                    <span class="tag bad">✗ Too vague</span>
+                    <span class="tag bad">✗ No spatial information</span>
+                    <span class="tag bad">✗ No character details</span>
+                    <span class="tag bad">✗ Problematic lighting</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Part 3: Creating Your Master Image -->
+    <div class="section content-section" data-section="4">
+        <div class="content-container">
+            <h2>Part 3: Creating Your Master Image</h2>
+            
+            <h3>Step-by-Step Process:</h3>
+            
+            <div class="numbered-list" style="margin: 2rem 0;">
+                <li><strong>Start with Your Scene Concept</strong>
+                    <ul style="margin-top: 0.5rem; margin-left: 2rem;">
+                        <li>What's your scene about?</li>
+                        <li>Who are your characters?</li>
+                        <li>Where does it take place?</li>
+                    </ul>
+                </li>
+                <li><strong>Write Your Master Image Prompt</strong></li>
+                <li><strong>Generate and Evaluate</strong></li>
+            </div>
+
+            <div class="example-box">
+                <h3>Prompt Structure Template:</h3>
+                <div class="prompt-template">
+                    [Shot Type], [Number] [character descriptions] [doing what] in/at [location], 
+                    [specific wardrobe details], [lighting type], [style notes]
+                </div>
+            </div>
+
+            <div class="example-box good-example">
+                <h3>Example Student Exercise:</h3>
+                <p><strong>Scene:</strong> A job interview going badly</p>
+                <div class="prompt-template" style="margin-top: 1rem;">
+                    "Cinematic medium-wide shot, nervous young woman in gray blazer sitting across desk from stern older man in dark suit, modern office with glass windows showing city skyline, fluorescent overhead lighting, corporate photography style, sharp focus"
+                </div>
+            </div>
+
+            <div class="example-box bad-example">
+                <h3>Common First-Attempt Problems:</h3>
+                <ul class="checklist">
+                    <li>Characters too close together (hard to get clean OTS)</li>
+                    <li>Faces obscured or turned away</li>
+                    <li>Cluttered backgrounds that might cause issues</li>
+                    <li>Extreme angles that limit coverage options</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Part 4: Student Work Time -->
+    <div class="section content-section" data-section="5">
+        <div class="content-container">
+            <h2>Part 4: Student Work Time</h2>
+            
+            <div class="assignment-box">
+                <h3>Assignment: Create Your Master Image</h3>
+                
+                <p style="margin: 1rem 0;"><strong>Requirements:</strong></p>
+                <ol class="numbered-list">
+                    <li>Write a 2-3 sentence scene description (what happens in your scene)</li>
+                    <li>Draft your master image prompt using the template</li>
+                    <li>Generate at least 3 variations</li>
+                    <li>Select your final master image</li>
+                    <li>Submit with a brief explanation (50 words) of why you chose this image</li>
+                </ol>
+
+                <h3 style="margin-top: 2rem;">Evaluation Criteria:</h3>
+                <div class="criteria-grid">
+                    <div class="criteria-item">
+                        <div class="percentage">20%</div>
+                        <p>Both/all characters clearly visible</p>
+                    </div>
+                    <div class="criteria-item">
+                        <div class="percentage">20%</div>
+                        <p>Spatial relationships obvious</p>
+                    </div>
+                    <div class="criteria-item">
+                        <div class="percentage">20%</div>
+                        <p>Sufficient framing space for coverage</p>
+                    </div>
+                    <div class="criteria-item">
+                        <div class="percentage">20%</div>
+                        <p>Consistent, workable lighting</p>
+                    </div>
+                    <div class="criteria-item">
+                        <div class="percentage">20%</div>
+                        <p>Narrative clarity</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Instructor Circulates:</h3>
+                <ul class="checklist">
+                    <li>Help students refine prompts</li>
+                    <li>Point out potential issues before generation</li>
+                    <li>Encourage specificity over vagueness</li>
+                    <li>Remind: "This image is your foundation for everything"</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Part 5: Gallery Critique -->
+    <div class="section content-section" data-section="6">
+        <div class="content-container">
+            <h2>Part 5: Gallery Critique</h2>
+            
+            <h3>Questions to Ask for Each Image:</h3>
+            <div class="discussion-questions">
+                <ul>
+                    <li>What works about this image?</li>
+                    <li>What coverage angles could you get from this?</li>
+                    <li>What potential problems do you see?</li>
+                    <li>How would you improve the prompt?</li>
+                </ul>
+            </div>
+
+            <div class="key-concept" style="font-size: 1.3rem;">
+                Key Takeaways
+            </div>
+
+            <ul class="objectives-list">
+                <li><strong>Specificity is your friend</strong> – Vague prompts = unpredictable results</li>
+                <li><strong>Think like a cinematographer</strong> – You need room to move the camera</li>
+                <li><strong>This is your foundation</strong> – Everything else builds from this</li>
+                <li><strong>Iteration is normal</strong> – Professional filmmakers do multiple takes; you'll do multiple generations</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Homework -->
+    <div class="section content-section" data-section="7">
+        <div class="content-container">
+            <h2>Homework / Next Class Prep</h2>
+            
+            <div class="assignment-box">
+                <h3>Required:</h3>
+                <ul class="checklist">
+                    <li>Finalize your master image (bring the file to next class)</li>
+                    <li>Write your full scene script broken into 7-second dialogue segments</li>
+                    <li>Watch recommended video on traditional coverage (if provided)</li>
+                </ul>
+
+                <h3 style="margin-top: 2rem;">Optional:</h3>
+                <ul class="checklist">
+                    <li><strong>Experiment:</strong> Try generating a second shot WITHOUT using your master image to see what happens</li>
+                    <li><strong>Read:</strong> Pages 2-3 of the paper (Methodology section)</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>Assessment:</h3>
+                <ul class="checklist">
+                    <li><strong>Participation:</strong> Active engagement in critique discussions</li>
+                    <li><strong>Master Image Submission:</strong> Due end of class or within 24 hours</li>
+                    <li><strong>Reflection Question:</strong> "What's the most important thing you learned about creating a master image?" (3-5 sentences)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final Section -->
+    <div class="section title-section" data-section="8">
+        <div class="content-container" style="text-align: center;">
+            <h1 style="font-size: 3rem;">Questions?</h1>
+            <p style="font-size: 1.3rem; margin-top: 2rem; color: #4ecdc4;">
+                Next Class: Generating the Master Shot Sequence
+            </p>
+            <div style="margin-top: 3rem; font-size: 1.1rem; color: #a0a0a0;">
+                <p>John Treviño, MFA</p>
+                <p>UTRGV Theater Department</p>
+                <p>Fall 2025</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Intersection Observer for scroll animations
+        const sections = document.querySelectorAll('.section');
+        const navDots = document.getElementById('navigation');
+        const scrollIndicator = document.getElementById('scrollIndicator');
+
+        // Create navigation dots
+        sections.forEach((section, index) => {
+            const dot = document.createElement('div');
+            dot.className = 'nav-dot';
+            dot.addEventListener('click', () => {
+                section.scrollIntoView({ behavior: 'smooth' });
+            });
+            navDots.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.nav-dot');
+
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Update navigation dots
+                    const sectionIndex = entry.target.getAttribute('data-section');
+                    dots.forEach((dot, index) => {
+                        if (index == sectionIndex) {
+                            dot.classList.add('active');
+                        } else {
+                            dot.classList.remove('active');
+                        }
+                    });
+
+                    // Hide scroll indicator after first section
+                    if (sectionIndex > 0) {
+                        scrollIndicator.style.opacity = '0';
+                    } else {
+                        scrollIndicator.style.opacity = '1';
+                    }
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const currentSection = Array.from(sections).find(section => 
+                section.getBoundingClientRect().top >= 0 && 
+                section.getBoundingClientRect().top < window.innerHeight / 2
+            );
+            
+            if (!currentSection) return;
+            
+            const currentIndex = parseInt(currentSection.getAttribute('data-section'));
+            
+            if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+                e.preventDefault();
+                if (currentIndex < sections.length - 1) {
+                    sections[currentIndex + 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                e.preventDefault();
+                if (currentIndex > 0) {
+                    sections[currentIndex - 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

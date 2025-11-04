@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Filmmaking - Lesson 2: Master Shot Sequence</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 20px;
+            position: relative;
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .section.animate-in {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .title-section {
+            background: linear-gradient(135deg, #2d1b69 0%, #5b2c6f 100%);
+            text-align: center;
+        }
+
+        .content-section {
+            background: #0f0f0f;
+        }
+
+        .section:nth-child(even) {
+            background: #1a1a1a;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff9500, #c77dff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient 3s ease infinite;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #c77dff;
+            border-bottom: 3px solid #ff9500;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem 0;
+            color: #ff9500;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #a0a0a0;
+            margin-bottom: 1rem;
+        }
+
+        .instructor-info {
+            font-size: 1.2rem;
+            color: #c77dff;
+            margin-top: 2rem;
+        }
+
+        .content-container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .objectives-list, .checklist {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .objectives-list li, .checklist li {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: rgba(199, 125, 255, 0.1);
+            border-left: 4px solid #c77dff;
+            border-radius: 4px;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .objectives-list li:hover, .checklist li:hover {
+            transform: translateX(10px);
+            background: rgba(199, 125, 255, 0.2);
+        }
+
+        .step-container {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: rgba(199, 125, 255, 0.05);
+            border-radius: 15px;
+            border: 2px solid #c77dff;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #ff9500;
+            margin-right: 1rem;
+            background: rgba(255, 149, 0, 0.2);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #ff9500;
+        }
+
+        .step-title {
+            font-size: 2rem;
+            color: #c77dff;
+            margin: 0;
+        }
+
+        .example-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 5px solid #c77dff;
+        }
+
+        .prompt-template {
+            background: #2d1b69;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            color: #c77dff;
+            margin: 1rem 0;
+            border: 1px solid #c77dff;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            margin: 0.2rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .tag.input {
+            background: #c77dff;
+            color: #0a0a0a;
+        }
+
+        .tag.output {
+            background: #ff9500;
+            color: #0a0a0a;
+        }
+
+        .tag.action {
+            background: #ffd60a;
+            color: #0a0a0a;
+        }
+
+        .key-concept {
+            background: linear-gradient(135deg, #ff9500, #c77dff);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 2rem 0;
+            box-shadow: 0 10px 40px rgba(199, 125, 255, 0.3);
+        }
+
+        .warning-box {
+            background: rgba(255, 149, 0, 0.1);
+            border: 2px solid #ff9500;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+
+        .warning-box h3 {
+            color: #ff9500;
+            margin-top: 0;
+        }
+
+        .workflow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .workflow-step {
+            background: rgba(199, 125, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 150px;
+            margin: 1rem;
+            border: 2px solid #c77dff;
+            transition: transform 0.3s ease;
+        }
+
+        .workflow-step:hover {
+            transform: scale(1.05);
+            background: rgba(199, 125, 255, 0.2);
+        }
+
+        .workflow-arrow {
+            font-size: 2rem;
+            color: #ff9500;
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            font-size: 2rem;
+            z-index: 100;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-20px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+
+        .navigation {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: #c77dff;
+            transform: scale(1.5);
+        }
+
+        .nav-dot:hover {
+            background: #ff9500;
+            transform: scale(1.3);
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tip-card {
+            background: rgba(199, 125, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid #c77dff;
+            transition: transform 0.3s ease;
+        }
+
+        .tip-card:hover {
+            transform: translateY(-5px);
+            background: rgba(199, 125, 255, 0.2);
+        }
+
+        .tip-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            h2 {
+                font-size: 1.8rem;
+            }
+            .navigation {
+                display: none;
+            }
+            .workflow-diagram {
+                flex-direction: column;
+            }
+            .workflow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        .numbered-list {
+            counter-reset: item;
+            list-style: none;
+        }
+
+        .numbered-list li {
+            counter-increment: item;
+            margin: 1rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .numbered-list li::before {
+            content: counter(item);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #c77dff;
+            color: #0a0a0a;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .comparison-box {
+            padding: 2rem;
+            border-radius: 10px;
+            border: 2px solid;
+        }
+
+        .do-box {
+            border-color: #c77dff;
+            background: rgba(199, 125, 255, 0.1);
+        }
+
+        .dont-box {
+            border-color: #ff9500;
+            background: rgba(255, 149, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .highlight {
+            background: rgba(255, 149, 0, 0.3);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Dots -->
+    <div class="navigation" id="navigation">
+        <!-- Will be populated by JavaScript -->
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator" id="scrollIndicator">↓</div>
+
+    <!-- Title Section -->
+    <div class="section title-section" data-section="0">
+        <h1>AI Filmmaking</h1>
+        <div class="subtitle">The Master Image Method</div>
+        <div class="instructor-info">
+            John Treviño, MFA<br>
+            UTRGV Theater Department<br>
+            Fall 2025
+        </div>
+        <div style="margin-top: 3rem; font-size: 2rem; color: #c77dff;">
+            Lesson 2: Generating the Master Shot Sequence
+        </div>
+    </div>
+
+    <!-- Learning Objectives -->
+    <div class="section content-section" data-section="1">
+        <div class="content-container">
+            <h2>Learning Objectives</h2>
+            <p style="margin-bottom: 2rem; font-size: 1.1rem;">By the end of this lesson, students will:</p>
+            <ul class="objectives-list">
+                <li>Understand the complete workflow for generating a master shot sequence</li>
+                <li>Learn the "chaining" technique for extending AI video clips</li>
+                <li>Master the art of prompting for dialogue and lip-sync</li>
+                <li>Successfully generate a full master shot sequence from their master image</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Recap -->
+    <div class="section content-section" data-section="2">
+        <div class="content-container">
+            <h2>Quick Recap: The Foundation</h2>
+            
+            <div class="key-concept">
+                "Do not chain angles. Always return to the source."
+            </div>
+
+            <div class="example-box">
+                <h3>What You Should Have:</h3>
+                <ul class="checklist">
+                    <li><strong>Your Master Image:</strong> A high-quality, wide shot with all characters visible</li>
+                    <li><strong>Your Script:</strong> Broken into segments of 1-2 lines (7 seconds or less)</li>
+                    <li><strong>AI Tool Access:</strong> Image-to-video generator ready to go</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <h3>⚠️ Critical Reminder</h3>
+                <p>Today we're generating the <span class="highlight">Master Shot Sequence</span> ONLY. This is the wide shot that covers your entire scene. We will NOT be generating other angles yet—that comes in Lesson 3.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Understanding the Master Shot -->
+    <div class="section content-section" data-section="3">
+        <div class="content-container">
+            <h2>Understanding the Master Shot Sequence</h2>
+            
+            <h3>What is a Master Shot?</h3>
+            <p style="font-size: 1.1rem; margin-bottom: 2rem;">
+                In traditional filmmaking, the master shot is a <strong>continuous wide shot</strong> that captures the entire scene from beginning to end. It serves as:
+            </p>
+
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">🎬</div>
+                    <h4 style="color: #c77dff;">Visual Foundation</h4>
+                    <p>Establishes where everyone is and their spatial relationships</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">✂️</div>
+                    <h4 style="color: #c77dff;">Editing Safety Net</h4>
+                    <p>Provides coverage you can always cut back to if other angles fail</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">🎭</div>
+                    <h4 style="color: #c77dff;">Performance Reference</h4>
+                    <p>Shows the full action and timing of the scene</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">🎯</div>
+                    <h4 style="color: #c77dff;">Continuity Anchor</h4>
+                    <p>The source of truth for what happens when</p>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>In AI Filmmaking:</h3>
+                <p style="font-size: 1.1rem;">
+                    Because AI tools limit us to short clips (5-10 seconds), we can't generate the entire master shot in one go. Instead, we <strong>"chain"</strong> multiple clips together, using the last frame of one clip as the starting image for the next.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- The Chaining Technique -->
+    <div class="section content-section" data-section="4">
+        <div class="content-container">
+            <h2>The Chaining Technique</h2>
+            
+            <div class="workflow-diagram">
+                <div class="workflow-step">
+                    <strong>Master Image</strong><br>
+                    <small>Your starting point</small>
+                </div>
+                <div class="workflow-arrow">→</div>
+                <div class="workflow-step">
+                    <strong>Segment 1</strong><br>
+                    <small>First 7 seconds</small>
+                </div>
+                <div class="workflow-arrow">→</div>
+                <div class="workflow-step">
+                    <strong>Last Frame</strong><br>
+                    <small>Extract & Export</small>
+                </div>
+                <div class="workflow-arrow">→</div>
+                <div class="workflow-step">
+                    <strong>Segment 2</strong><br>
+                    <small>Next 7 seconds</small>
+                </div>
+                <div class="workflow-arrow">→</div>
+                <div class="workflow-step">
+                    <strong>Repeat</strong><br>
+                    <small>Until complete</small>
+                </div>
+            </div>
+
+            <div class="key-concept">
+                Each clip's ending becomes the next clip's beginning
+            </div>
+
+            <div class="example-box">
+                <h3>Why Chain Instead of Generate Separately?</h3>
+                <ul class="checklist">
+                    <li><strong>Visual Continuity:</strong> The last frame ensures the next clip starts exactly where the previous one ended</li>
+                    <li><strong>Smooth Motion:</strong> No jarring jumps or discontinuities between segments</li>
+                    <li><strong>Character Consistency:</strong> Expressions and positions flow naturally</li>
+                    <li><strong>Professional Result:</strong> Looks like one continuous shot when edited together</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="section content-section" data-section="5">
+        <div class="content-container">
+            <h2>Step-by-Step Workflow</h2>
+            
+            <div class="step-container">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Generate Segment 1</h3>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <span class="tag input">INPUT</span>
+                    <p style="margin-top: 0.5rem;">Your Master Image</p>
+                </div>
+
+                <div class="example-box">
+                    <h3>Prompt Structure for Segment 1:</h3>
+                    <div class="prompt-template">
+From this image, [Character A] says, "[First line of dialogue]" [Character B] responds, "[Second line of dialogue]" Lip-sync, keep camera static.
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>Real Example:</h3>
+                    <p><strong>Scene:</strong> Breakup conversation on park bench</p>
+                    <div class="prompt-template">
+From this image, the man says, "I think we need to talk." The woman responds, "What's wrong?" Lip-sync, keep camera static, maintain wide shot.
+                    </div>
+                </div>
+
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <div class="tip-icon">💡</div>
+                        <h4 style="color: #ff9500;">Key Elements</h4>
+                        <ul style="margin-top: 0.5rem; font-size: 0.9rem;">
+                            <li>"From this image" - anchors to source</li>
+                            <li>Exact dialogue in quotes</li>
+                            <li>"Lip-sync" - critical for matching</li>
+                            <li>"Keep camera static" - no camera movement</li>
+                        </ul>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">⏱️</div>
+                        <h4 style="color: #ff9500;">Timing</h4>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Keep dialogue segments under 7 seconds when spoken aloud. Read it out loud before generating!</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 1.5rem;">
+                    <span class="tag output">OUTPUT</span>
+                    <p style="margin-top: 0.5rem;">Your first video clip (5-10 seconds)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="section content-section" data-section="6">
+        <div class="content-container">
+            <div class="step-container">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Extract the Last Frame</h3>
+                </div>
+
+                <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">
+                    This is the crucial linking step. You need to export the very last frame of your generated clip as a still image.
+                </p>
+
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <div class="tip-icon">🎬</div>
+                        <h4 style="color: #c77dff;">In Most AI Tools</h4>
+                        <ul style="margin-top: 0.5rem; font-size: 0.9rem;">
+                            <li>Download the video</li>
+                            <li>Open in video player or editor</li>
+                            <li>Scrub to the final frame</li>
+                            <li>Export as image (JPG or PNG)</li>
+                        </ul>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">⚙️</div>
+                        <h4 style="color: #c77dff;">Pro Tip</h4>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Some tools let you export a frame directly. Look for "Extract Frame" or "Save Frame" options.</p>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <h3>⚠️ Important</h3>
+                    <p>Make sure you get the <strong>actual last frame</strong>, not a frame from the middle. The AI needs to see exactly where the previous action ended.</p>
+                </div>
+
+                <div style="margin-top: 1.5rem;">
+                    <span class="tag output">OUTPUT</span>
+                    <p style="margin-top: 0.5rem;">Last frame saved as an image file</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="section content-section" data-section="7">
+        <div class="content-container">
+            <div class="step-container">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Generate Segment 2</h3>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <span class="tag input">INPUT</span>
+                    <p style="margin-top: 0.5rem;">The last frame you just extracted (NOT the original master image!)</p>
+                </div>
+
+                <div class="example-box">
+                    <h3>Prompt Structure for Segment 2:</h3>
+                    <div class="prompt-template">
+Continuing from this frame, [Character A] says, "[Next line of dialogue]" [Optional: Character B responds, "[Line]"] Keep camera static.
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>Real Example:</h3>
+                    <div class="prompt-template">
+Continuing from this frame, the man says, "I'm breaking up with you." The woman looks shocked. Keep camera static, maintain wide shot, natural performance.
+                    </div>
+                </div>
+
+                <div class="comparison-grid">
+                    <div class="comparison-box do-box">
+                        <h3 style="color: #c77dff;">✓ DO</h3>
+                        <ul style="margin-top: 1rem;">
+                            <li>Use "Continuing from this frame"</li>
+                            <li>Maintain camera consistency</li>
+                            <li>Keep prompts focused on dialogue</li>
+                            <li>Specify performance if needed</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-box dont-box">
+                        <h3 style="color: #ff9500;">✗ DON'T</h3>
+                        <ul style="margin-top: 1rem;">
+                            <li>Re-describe the scene setup</li>
+                            <li>Ask for camera movement (yet)</li>
+                            <li>Change character descriptions</li>
+                            <li>Overload with new instructions</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="margin-top: 1.5rem;">
+                    <span class="tag output">OUTPUT</span>
+                    <p style="margin-top: 0.5rem;">Your second video clip</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="section content-section" data-section="8">
+        <div class="content-container">
+            <div class="step-container">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <h3 class="step-title">Repeat Until Complete</h3>
+                </div>
+
+                <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">
+                    Continue the chain: extract last frame → generate next segment → extract last frame → and so on, until your entire scene is covered.
+                </p>
+
+                <div class="workflow-diagram">
+                    <div class="workflow-step">
+                        <strong>Segment 2</strong><br>
+                        <small>Generated</small>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-step">
+                        <strong>Extract</strong><br>
+                        <small>Last Frame</small>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-step">
+                        <strong>Segment 3</strong><br>
+                        <small>Generate</small>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-step">
+                        <strong>Extract</strong><br>
+                        <small>Last Frame</small>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-step">
+                        <strong>Continue...</strong><br>
+                        <small>To end</small>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h3>Scene Organization Tips:</h3>
+                    <ul class="checklist">
+                        <li><strong>Name your files clearly:</strong> "master_segment_01.mp4", "master_segment_02.mp4", etc.</li>
+                        <li><strong>Save all last frames:</strong> "master_frame_01.jpg", "master_frame_02.jpg", etc.</li>
+                        <li><strong>Keep a log:</strong> Write down which prompt was used for each segment</li>
+                        <li><strong>Test as you go:</strong> Watch each clip before moving to the next</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Common Issues -->
+    <div class="section content-section" data-section="9">
+        <div class="content-container">
+            <h2>Common Issues & Solutions</h2>
+
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <h4 style="color: #ff9500;">Problem: Lip-Sync is Off</h4>
+                    <p style="margin-top: 0.5rem; font-size: 0.9rem;"><strong>Solution:</strong> Add "accurate lip-sync" and "natural mouth movement" to prompt. Consider shortening dialogue.</p>
+                </div>
+                <div class="tip-card">
+                    <h4 style="color: #ff9500;">Problem: Characters Move Too Much</h4>
+                    <p style="margin-top: 0.5rem; font-size: 0.9rem;"><strong>Solution:</strong> Add "minimal movement" or "subtle gestures" to keep them relatively still.</p>
+                </div>
+                <div class="tip-card">
+                    <h4 style="color: #ff9500;">Problem: Camera Drifts</h4>
+                    <p style="margin-top: 0.5rem; font-size: 0.9rem;"><strong>Solution:</strong> Emphasize "keep camera completely static" or "locked-off camera" in every prompt.</p>
+                </div>
+                <div class="tip-card">
+                    <h4 style="color: #ff9500;">Problem: Clip Looks Different</h4>
+                    <p style="margin-top: 0.5rem; font-size: 0.9rem;"><strong>Solution:</strong> Make sure you're using the LAST FRAME of previous clip, not the master image.</p>
+                </div>
+                <div class="tip-card">
+                    <h4 style="color: #ff9500;">Problem: Awkward Pauses</h4>
+                    <p style="margin-top: 0.5rem; font-size: 0.9rem;"><strong>Solution:</strong> Add "Character A finishes speaking, Character B immediately responds" to prompt.</p>
+                </div>
+                <div class="tip-card">
+                    <h4 style="color: #ff9500;">Problem: Wrong Emotion</h4>
+                    <p style="margin-top: 0.5rem; font-size: 0.9rem;"><strong>Solution:</strong> Specify emotion: "Character A says angrily" or "Character B responds sadly".</p>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h3>🔧 Troubleshooting Mindset</h3>
+                <p style="font-size: 1.1rem;">
+                    AI generation is iterative. If a segment doesn't work, regenerate it with a refined prompt. Don't chain bad clips—fix them first! You can always go back to the previous good frame and try again.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advanced Prompting -->
+    <div class="section content-section" data-section="10">
+        <div class="content-container">
+            <h2>Advanced Prompting Tips</h2>
+
+            <div class="example-box">
+                <h3>Voice & Performance Direction</h3>
+                <p style="margin-bottom: 1rem;">The AI responds well to performance directions:</p>
+                <ul class="checklist">
+                    <li><strong>Voice Quality:</strong> "Character A speaks in a deep, steady male voice"</li>
+                    <li><strong>Pacing:</strong> "Character B responds quickly" or "long pause before speaking"</li>
+                    <li><strong>Emotion:</strong> "says nervously" / "responds with confidence" / "whispers"</li>
+                    <li><strong>Volume:</strong> "raises voice" / "speaks softly"</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>Enhanced Prompt Example:</h3>
+                <div class="prompt-template">
+Continuing from this frame, the man says in a calm, measured voice, "I'm breaking up with you." Brief pause. The woman's expression shifts from confusion to shock. Natural reactions, subtle movements, accurate lip-sync, keep camera static.
+                </div>
+                <p style="margin-top: 1rem; font-size: 0.9rem; color: #a0a0a0;">
+                    Note how this adds performance detail without overcomplicating the visual description.
+                </p>
+            </div>
+
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">🎭</div>
+                    <h4 style="color: #c77dff;">Reactions</h4>
+                    <p style="margin-top: 0.5rem; font-size: 0.9rem;">Include non-speaking character reactions: "Character B listens intently"</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">⏸️</div>
+                    <h4 style="color: #c77dff;">Pauses</h4>
+                    <p style="margin-top: 0.5rem; font-size: 0.9rem;">Build in beats: "Long pause before Character A responds"</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">👀</div>
+                    <h4 style="color: #c77dff;">Eye Lines</h4>
+                    <p style="margin-top: 0.5rem; font-size: 0.9rem;">Direct attention: "Character A looks away, then back at B"</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- In-Class Exercise -->
+    <div class="section content-section" data-section="11">
+        <div class="content-container">
+            <h2>In-Class Exercise</h2>
+            
+            <div class="step-container">
+                <h3 style="margin-top: 0; color: #ff9500;">Generate Your First Two Segments</h3>
+                
+                <ol class="numbered-list" style="margin-top: 2rem;">
+                    <li>Load your Master Image into your AI tool</li>
+                    <li>Generate Segment 1 using your first script segment</li>
+                    <li>Review the result - does it work?</li>
+                    <li>Extract the last frame</li>
+                    <li>Generate Segment 2 from that last frame</li>
+                    <li>Watch both clips back-to-back</li>
+                </ol>
+
+                <div class="warning-box" style="margin-top: 2rem;">
+                    <h3>✅ Success Criteria</h3>
+                    <ul class="checklist">
+                        <li>Lip-sync matches the dialogue reasonably well</li>
+                        <li>Characters maintain consistent appearance</li>
+                        <li>Camera stays static (no unwanted movement)</li>
+                        <li>Transition between clips is smooth</li>
+                        <li>Dialogue timing feels natural</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="example-box" style="margin-top: 2rem;">
+                <h3>What to Do If It's Not Working:</h3>
+                <ul class="checklist">
+                    <li><strong>Lip-sync issues:</strong> Simplify dialogue, add "accurate lip-sync" to prompt</li>
+                    <li><strong>Too much movement:</strong> Add "minimal movement, subtle gestures"</li>
+                    <li><strong>Jarring transition:</strong> Make sure you used the LAST frame, not a middle frame</li>
+                    <li><strong>Wrong emotion:</strong> Be more specific about performance in prompt</li>
+                </ul>
+                <p style="margin-top: 1rem; color: #ff9500;">
+                    <strong>Don't move forward with bad clips!</strong> Regenerate until you have two solid segments.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Homework -->
+    <div class="section content-section" data-section="12">
+        <div class="content-container">
+            <h2>Homework</h2>
+            
+            <div class="step-container">
+                <h3 style="margin-top: 0; color: #c77dff;">Assignment: Complete Your Master Shot Sequence</h3>
+                
+                <div style="margin: 2rem 0;">
+                    <p style="font-size: 1.1rem; margin-bottom: 1rem;"><strong>Deliverables:</strong></p>
+                    <ol class="numbered-list">
+                        <li>All individual segment video files (numbered sequentially)</li>
+                        <li>A rough edit of all segments combined into one master shot sequence</li>
+                        <li>All last frame images (saved and organized)</li>
+                        <li>A text file with all prompts used</li>
+                    </ol>
+                </div>
+
+                <div class="tips-grid" style="margin-top: 2rem;">
+                    <div class="tip-card">
+                        <div class="tip-icon">📁</div>
+                        <h4 style="color: #ff9500;">Organization</h4>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Create a folder structure: /master_shots/, /frames/, /prompts.txt</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">⏱️</div>
+                        <h4 style="color: #ff9500;">Time Estimate</h4>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Plan 2-3 hours for a 30-second scene (includes regenerations)</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">💾</div>
+                        <h4 style="color: #ff9500;">Save Everything</h4>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Keep all files—even failed attempts can be useful references</p>
+                    </div>
+                </div>
+
+                <div class="warning-box" style="margin-top: 2rem;">
+                    <h3>⚠️ Due Date</h3>
+                    <p style="font-size: 1.1rem;">Next class session. Come prepared to show your master shot sequence and discuss challenges you encountered.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Next Steps Preview -->
+    <div class="section content-section" data-section="13">
+        <div class="content-container">
+            <h2>Looking Ahead: Lesson 3</h2>
+            
+            <div class="key-concept">
+                Next class: Generating Coverage Angles
+            </div>
+
+            <p style="font-size: 1.1rem; margin: 2rem 0;">
+                Once you have your complete master shot sequence, we'll learn how to generate additional angles (over-the-shoulder shots, close-ups, etc.) by returning to the <strong>original master image</strong> for each new angle.
+            </p>
+
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">🎥</div>
+                    <h4 style="color: #c77dff;">Coverage Angles</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">OTS, close-ups, reaction shots, inserts</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">🔄</div>
+                    <h4 style="color: #c77dff;">The Return Principle</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Always go back to the master image for new angles</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">📐</div>
+                    <h4 style="color: #c77dff;">Spatial Commands</h4>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Dealing with "left" vs "right" confusion</p>
+                </div>
+            </div>
+
+            <div class="example-box" style="margin-top: 2rem;">
+                <h3>What You'll Need Ready:</h3>
+                <ul class="checklist">
+                    <li>Your original master image</li>
+                    <li>Your completed master shot sequence</li>
+                    <li>Your script segments (same ones)</li>
+                    <li>A shot list of desired angles</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final Section -->
+    <div class="section title-section" data-section="14">
+        <div class="content-container" style="text-align: center;">
+            <h1 style="font-size: 3rem;">Go Create!</h1>
+            <p style="font-size: 1.3rem; margin-top: 2rem; color: #c77dff;">
+                Remember: Chain clips for the master shot,<br>
+                but never chain between different angles.
+            </p>
+            <div style="margin-top: 3rem; font-size: 1.1rem; color: #a0a0a0;">
+                <p>John Treviño, MFA</p>
+                <p>UTRGV Theater Department</p>
+                <p>Fall 2025</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Intersection Observer for scroll animations
+        const sections = document.querySelectorAll('.section');
+        const navDots = document.getElementById('navigation');
+        const scrollIndicator = document.getElementById('scrollIndicator');
+
+        // Create navigation dots
+        sections.forEach((section, index) => {
+            const dot = document.createElement('div');
+            dot.className = 'nav-dot';
+            dot.addEventListener('click', () => {
+                section.scrollIntoView({ behavior: 'smooth' });
+            });
+            navDots.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.nav-dot');
+
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Update navigation dots
+                    const sectionIndex = entry.target.getAttribute('data-section');
+                    dots.forEach((dot, index) => {
+                        if (index == sectionIndex) {
+                            dot.classList.add('active');
+                        } else {
+                            dot.classList.remove('active');
+                        }
+                    });
+
+                    // Hide scroll indicator after first section
+                    if (sectionIndex > 0) {
+                        scrollIndicator.style.opacity = '0';
+                    } else {
+                        scrollIndicator.style.opacity = '1';
+                    }
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const currentSection = Array.from(sections).find(section => 
+                section.getBoundingClientRect().top >= 0 && 
+                section.getBoundingClientRect().top < window.innerHeight / 2
+            );
+            
+            if (!currentSection) return;
+            
+            const currentIndex = parseInt(currentSection.getAttribute('data-section'));
+            
+            if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+                e.preventDefault();
+                if (currentIndex < sections.length - 1) {
+                    sections[currentIndex + 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                e.preventDefault();
+                if (currentIndex > 0) {
+                    sections[currentIndex - 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
