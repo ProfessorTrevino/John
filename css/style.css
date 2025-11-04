@@ -161,6 +161,10 @@ main {
   padding: clamp(2.5rem, 6vw, 4.5rem) 0 4rem;
 }
 
+.hero__content {
+  position: relative;
+  z-index: 2;
+}
 .hero {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -296,6 +300,8 @@ main {
 
 .hero__stage {
   position: relative;
+  z-index: 1;
+  pointer-events: none;
   display: grid;
   place-items: center;
   background: var(--surface);
@@ -322,12 +328,13 @@ main {
 
 .carousel {
   --panel-count: 8;
-  --radius: clamp(240px, 36vw, 360px);
+  --radius: clamp(200px, 32vw, 320px);
   position: relative;
-  width: clamp(300px, 45vw, 420px);
-  height: clamp(320px, 52vw, 440px);
+  width: clamp(260px, 40vw, 360px);
+  height: clamp(300px, 48vw, 420px);
   transform-style: preserve-3d;
   animation: spin 26s linear infinite;
+  pointer-events: auto;
 }
 
 .hero__stage:hover .carousel,
@@ -345,8 +352,8 @@ main {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: clamp(210px, 32vw, 260px);
-  height: clamp(260px, 40vw, 320px);
+  width: clamp(200px, 30vw, 240px);
+  height: clamp(240px, 38vw, 300px);
   padding: 1.4rem;
   border-radius: 1.4rem;
   background: rgba(11, 22, 46, 0.78);
@@ -404,7 +411,7 @@ main {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: clamp(160px, 26vw, 240px);
+  width: clamp(150px, 22vw, 210px);
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
   border-radius: 50%;
@@ -934,10 +941,18 @@ main {
   }
 
   .hero {
+}
+.hero__content {
+  position: relative;
+  z-index: 2;
+}
+.hero {
     grid-template-columns: 1fr;
   }
 
   .hero__stage {
+  pointer-events: none;
+  z-index: 1;
     perspective: none;
     order: 2;
     min-height: auto;
