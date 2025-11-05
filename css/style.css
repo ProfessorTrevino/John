@@ -520,6 +520,49 @@ main {
   color: var(--text-300);
 }
 
+.photo-gallery__grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.photo-gallery__card {
+  border-radius: 1.2rem;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-subtle);
+  transition: transform 0.25s ease, border 0.25s ease, box-shadow 0.25s ease;
+}
+
+.photo-gallery__card:hover,
+.photo-gallery__card:focus-within {
+  transform: translateY(-4px);
+  border-color: var(--border);
+  box-shadow: var(--shadow-soft);
+}
+
+.photo-gallery__card img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.photo-gallery__card:hover img,
+.photo-gallery__card:focus-within img {
+  transform: scale(1.08);
+}
+
+.photo-gallery__caption {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  font-size: 0.9rem;
+  color: var(--text-500);
+  border-top: 1px solid rgba(96, 165, 250, 0.12);
+  background: linear-gradient(180deg, rgba(15, 27, 50, 0.92), rgba(9, 14, 28, 0.88));
+}
+
 .achievement-grid,
 .publications-grid {
   display: grid;
