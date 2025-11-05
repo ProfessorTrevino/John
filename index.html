@@ -10,7 +10,36 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/style.css?v=20240511" />
+    <style>
+      .photo-gallery__grid {
+        display: grid;
+        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      }
+      .photo-gallery__card {
+        max-width: 360px;
+        margin: 0 auto;
+        border-radius: 1.2rem;
+        overflow: hidden;
+        background: rgba(12, 21, 42, 0.85);
+      }
+      .photo-gallery__card img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      .photo-gallery__caption {
+        margin: 0;
+        padding: 1rem 1.25rem;
+        font-size: 0.9rem;
+      }
+      @media (max-width: 560px) {
+        .photo-gallery__card {
+          max-width: 100%;
+        }
+      }
+    </style>
   </head>
   <body>
     <div class="noise"></div>
