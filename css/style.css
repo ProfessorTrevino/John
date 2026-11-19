@@ -1087,6 +1087,15 @@ main {
   }
 }
 
+@media (max-width: 340px) {
+  .hero__cta .primary-btn,
+  .hero__cta .secondary-btn {
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+    font-size: 0.82rem;
+  }
+}
+
 /* pop-up video player */
 .video-modal {
   width: min(960px, 94vw);
