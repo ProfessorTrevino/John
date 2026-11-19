@@ -103,7 +103,7 @@
             </a>
           </div>
           <div class="hero__contact">
-            <a href="mailto:john@johntrevinomfa.com">John.Trevino@UTRGV.edu</a>
+            <a href="mailto:ProfessorJohnTrevino@gmail.com">ProfessorJohnTrevino@gmail.com</a>
             <a href="https://www.youtube.com/@utrgv3361" target="_blank" rel="noopener">UTRGV 3361 Channel</a>
             <a href="https://www.imdb.com/name/nm2037390/?ref_=ext_shr_lnk" target="_blank" rel="noopener">IMDb</a>
             <span>Edinburg, TX</span>
@@ -534,7 +534,7 @@
           Find on LinkedIn
         </a>
         <a href="https://www.youtube.com/@utrgv3361" target="_blank" rel="noopener">UTRGV 3361 Channel</a>
-        <a href="mailto:john@johntrevinomfa.com">Email John</a>
+        <a href="mailto:ProfessorJohnTrevino@gmail.com">Email John</a>
       </div>
       <p class="legal">
         Crafted with purpose · © <span id="year"></span> John Trevino. All rights
@@ -556,6 +556,10 @@
       (function () {
         var dlg = document.getElementById('video-modal');
         if (!dlg || typeof dlg.showModal !== 'function') return; // old browsers: the button opens the video in a new tab
+        // Phones and tablets block the Google Drive player inside other sites (it stays black), so there the
+        // button opens the video straight in Google Drive instead of the pop-up.
+        var touch = window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+        if (touch || window.innerWidth < 768) return;
         var frame = dlg.querySelector('iframe');
         document.querySelectorAll('.js-video').forEach(function (btn) {
           btn.addEventListener('click', function (e) {
