@@ -1184,32 +1184,16 @@ body {
 .apps__grid .app-card {
   grid-column: span 2;
 }
-/* three on top, two centered below */
-.apps__grid .app-card:nth-child(4) {
-  grid-column: 2 / span 2;
-}
-.apps__grid .app-card:nth-child(5) {
-  grid-column: 4 / span 2;
-}
 @media (max-width: 900px) {
   .apps__grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-  .apps__grid .app-card,
-  .apps__grid .app-card:nth-child(4) {
-    grid-column: span 2;
-  }
-  .apps__grid .app-card:nth-child(5) {
-    grid-column: 2 / span 2;
   }
 }
 @media (max-width: 600px) {
   .apps__grid {
     grid-template-columns: minmax(0, 1fr);
   }
-  .apps__grid .app-card,
-  .apps__grid .app-card:nth-child(4),
-  .apps__grid .app-card:nth-child(5) {
+  .apps__grid .app-card {
     grid-column: auto;
   }
 }
