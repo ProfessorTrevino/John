@@ -1263,3 +1263,18 @@ body {
   color: #fff7c2;
   font-size: 0.88rem;
 }
+
+
+/* TREVINIUM logo in the header (replaces the JT badge) */
+.site-header .logo {
+  padding: 0;
+  overflow: hidden;
+  background: #0b0b0c;
+  box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.55);
+}
+.site-header .logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
